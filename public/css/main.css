@@ -1,0 +1,57 @@
+
+body {
+  background-color: peachpuff;
+}
+
+title {
+  text-align: center;  
+}
+h1{
+  text-align: center;
+  font-size: 30pt;
+  color:rgb(255, 0, 0);
+}
+
+li.is-palindrome{
+  color: blue;
+}
+
+li.not-palindrome{
+  color: red;
+}
+label.attemptsLabel{
+  text-align: left;
+  color: brown;
+  font-size: 20pt;
+  font-family: 'Times New Roman';
+}
+h2{
+  font-size: 20pt;
+}
+footer{
+  text-align: center;
+}
+label {
+  
+  display: block;
+  text-align: center;
+  font-size: 15pt;
+}
+p {
+  font-size: 15pt;
+  color: blue;
+}
+
+input{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  height: 100%;
+}
+
+input[type = "submit"]{
+  background-color: blue;
+  color: white;
+  height: 20pt;
+}
