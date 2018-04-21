@@ -21,6 +21,8 @@ router.get('/', (req,res)=>{
   res.render(path.resolve("static/index.handlebars"),{
     title:"The Best Palindrome Checker in the World!"
   });    
+
+  console.log("do database work here");
     // res.status(403).render(path.resolve("static/index.handlebars"),{
     //   title:"The Best Palindrome Checker in the World!"
     // });

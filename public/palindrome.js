@@ -10,6 +10,7 @@ $(document).ready(function() {
     time: null,
     chef: null
   };
+  
   $("form").submit(function(e){
     e.preventDefault(e);
     obj.name = $("#recipeName").val();
