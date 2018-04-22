@@ -10,7 +10,7 @@ $(document).ready(function() {
     time: null,
     chef: null
   };
-  
+
   $("form").submit(function(e){
     e.preventDefault(e);
     obj.name = $("#recipeName").val();
@@ -30,6 +30,7 @@ $(document).ready(function() {
       dataType: "json"
     });
   });
+  
   $("#checkIng").click(function (e){
     e.preventDefault(e);
     var temp = $("#ing").val();
