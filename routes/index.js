@@ -4,8 +4,8 @@ const path = require("path");
 const bodyParser = require('body-parser');
 const express = require("express");
 var MC = require('mongodb').MongoClient;
-// const uuid = require('uuid/v4');
-
+const uuid = require('uuid/v4');
+var tempID = uuid();
 var collection;
 
 MC.connect("mongodb://localhost:27017/", function(err, db) {
@@ -51,9 +51,12 @@ router.get('/', (req,res)=>{
     // console.log(req.body.time);
     // console.log(req.body.chef);
 
-    console.log(req.body);
     var recipeToAdd = req.body;
-
+    tempID = uuid();
+    recipeToAdd._id = tempID;
+    console.log(req.body);
+    console.log("tempID: " + tempID);
+    console.log("recipeToAdd._id: " + recipeToAdd._id);
 
     console.log("do database work here");
     collection.insert(recipeToAdd, (err, numAffected, recipe) =>{

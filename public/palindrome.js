@@ -3,7 +3,9 @@
 
 $(document).ready(function() {
 
-  var obj = {name: null,
+  var obj = {
+    _id: null,
+    name: null,
     ingss: [],
     steps: [],
     servings: null,
@@ -13,11 +15,12 @@ $(document).ready(function() {
 
   $("form").submit(function(e){
     e.preventDefault(e);
+
     obj.name = $("#recipeName").val();
     obj.servings = $("#serving").val();
     obj.time = $("#time").val();
     obj.chef = $("#chef").val();
-    
+
     console.log(obj);
     $.ajax({
       type: "POST",
@@ -36,7 +39,7 @@ $(document).ready(function() {
     var temp = $("#ing").val();
     $("#ingList").append("<li>"+ temp + "</li>");
 
-    console.log(temp);
+    // console.log(temp);
     obj.ingss.push(temp);
   });
 
@@ -46,7 +49,7 @@ $(document).ready(function() {
     var temp = $("#step").val();
     $("#stepList").append("<li>"+ temp + "</li>");
 
-    console.log(temp);
+    // console.log(temp);
     obj.steps.push(temp);
   });
 });
