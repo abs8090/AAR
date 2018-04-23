@@ -89,14 +89,24 @@ router.get('/', (req,res)=>{
   
       var recipeToSearchFor = req.body;
       //var allProductsArray = db.products.find().toArray();
+      console.log(recipeToSearchFor.name);
 
-      await collection.find().toArray((err, recipes) =>{
-        if(err) throw err;
-        recipesArr = recipes;
-        // console.log("recipes length: " + recipes.length);
-        // console.log(typeof recipes);
+      collection.findOne({name: recipeToSearchFor.name}, (err, recipe) =>{
+        
+        if(err) throw "err";
+        if(recipe === null) throw "no document found with this ID";
+        console.log(recipe);
     });
-      console.log("new message length: " + recipesArr.length);
+
+
+    // get all recipes:   
+    //   await collection.find().toArray((err, recipes) =>{
+    //     if(err) throw err;
+    //     recipesArr = recipes;
+    //     // console.log("recipes length: " + recipes.length);
+    //     // console.log(typeof recipes);
+    // });
+    //   console.log("new message length: " + recipesArr.length);
       
       res.json({send : "data recieved", status: true}); //last line in this function
     });
