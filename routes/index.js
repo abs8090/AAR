@@ -88,6 +88,7 @@ router.get('/', (req,res)=>{
       // console.log(req.body.name);
   
       var recipeToSearchFor = req.body;
+      //var allProductsArray = db.products.find().toArray();
 
       await collection.find().toArray((err, recipes) =>{
         if(err) throw err;
