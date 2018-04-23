@@ -38,8 +38,12 @@ $(document).ready(function() {
   
   $("#checkIng").click(function (e){
     e.preventDefault(e);
-    var temp = $("#ing").val();
-    $("#ingList").append("<li>"+ temp + "</li>");
+    var temp = {
+      name: $("#ing").val(),
+      quantity: $("#quantity").val()
+    }
+    
+    $("#ingList").append("<li>"+ temp.name + "</li>");
 
     // console.log(temp);
     obj.ingss.push(temp);
