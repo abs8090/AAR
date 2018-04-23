@@ -68,6 +68,8 @@ router.get('/', (req,res)=>{
 
   router.get('/search', (req,res)=>{
 
+    console.log("search page");
+    console.log(req.body);
     res.render(path.resolve("views/posts/search.handlebars"),{
       title:"search page!"
     });    
@@ -76,6 +78,27 @@ router.get('/', (req,res)=>{
       // });
     });
 
+    router.post('/search', (req,res)=>{
+        
+      // res.render(path.resolve("static/index.handlebars"),{
+      //   title:"The Best Palindrome Checker in the World!"
+      // });
+  
+      // console.log(req.body.name);
+  
+      // var recipeToSearchFor = req.body;
+
+      collection.find().toArray((err, recipes) =>{
+        if(err) throw err;
+        console.log(recipes);
+    });
+
+      console.log(req.body);
+
+     // res.json({send : "data recieved", status: true}); //last line in this function
+      // recipeNam = req.body.recipeName;
+      // stepsArr = req.body.steps;
+    });
 
   // router.post('/result', (req,res)=>{
         
