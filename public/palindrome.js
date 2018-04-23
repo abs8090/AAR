@@ -10,7 +10,8 @@ $(document).ready(function() {
     steps: [],
     servings: null,
     time: null,
-    chef: null
+    chef: null,
+    category: null
   };
 
   $("form").submit(function(e){
@@ -20,6 +21,7 @@ $(document).ready(function() {
     obj.servings = $("#serving").val();
     obj.time = $("#time").val();
     obj.chef = $("#chef").val();
+    obj.category = $("#category").val();
 
     console.log(obj);
     $.ajax({
