@@ -45,11 +45,6 @@ router.get('/', (req,res)=>{
     // });
 
     // console.log(req.body.name);
-    // console.log(req.body.ingss);
-    // console.log(req.body.steps);
-    // console.log(req.body.servings);
-    // console.log(req.body.time);
-    // console.log(req.body.chef);
 
     var recipeToAdd = req.body;
     tempID = uuid();
@@ -70,6 +65,16 @@ router.get('/', (req,res)=>{
     // recipeNam = req.body.recipeName;
     // stepsArr = req.body.steps;
   });
+
+  router.get('/search', (req,res)=>{
+
+    res.render(path.resolve("views/posts/search.handlebars"),{
+      title:"search page!"
+    });    
+      // res.status(403).render(path.resolve("static/index.handlebars"),{
+      //   title:"The Best Palindrome Checker in the World!"
+      // });
+    });
 
 
   // router.post('/result', (req,res)=>{
