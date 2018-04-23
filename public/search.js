@@ -13,17 +13,22 @@ $(document).ready(function() {
 
     obj.name = $("#recipeName").val();
 
-    console.log(obj);
-    $.ajax({
-      type: "POST",
-      url: "/search",
-      data: obj,
-      success: function(data){
-        console.log("some data");
-
-      },
-      dataType: "json"
-    });
+    if (obj.name === ""){
+        alert("enter recipe name");
+        return;
+    }else {
+        console.log(obj);
+        $.ajax({
+          type: "POST",
+          url: "/search",
+          data: obj,
+          success: function(data){
+            console.log("some data");
+    
+          },
+          dataType: "json"
+        });
+    }
   });
   
   $("#checkIng").click(function (e){

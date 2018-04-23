@@ -27,6 +27,7 @@ app.set('view engine', 'handlebars');
 
 var recipeNam = "";
 var stepsArr = [];
+var recipesArr = [];
 
 router.get('/', (req,res)=>{
 
@@ -78,7 +79,7 @@ router.get('/', (req,res)=>{
       // });
     });
 
-    router.post('/search', (req,res)=>{
+    router.post('/search', async (req,res)=>{
         
       // res.render(path.resolve("static/index.handlebars"),{
       //   title:"The Best Palindrome Checker in the World!"
@@ -86,38 +87,17 @@ router.get('/', (req,res)=>{
   
       // console.log(req.body.name);
   
-      // var recipeToSearchFor = req.body;
+      var recipeToSearchFor = req.body;
 
-      collection.find().toArray((err, recipes) =>{
+      await collection.find().toArray((err, recipes) =>{
         if(err) throw err;
-        console.log(recipes);
+        recipesArr = recipes;
+        // console.log("recipes length: " + recipes.length);
+        // console.log(typeof recipes);
     });
-
-      console.log(req.body);
-
-     // res.json({send : "data recieved", status: true}); //last line in this function
-      // recipeNam = req.body.recipeName;
-      // stepsArr = req.body.steps;
+      console.log("new message length: " + recipesArr.length);
+      
+      res.json({send : "data recieved", status: true}); //last line in this function
     });
-
-  // router.post('/result', (req,res)=>{
-        
-  //   // console.log(req.body.name);
-  //   recipeNam = req.body.recipeName;
-  //   stepsArr = req.body.steps;
-
-  //   console.log(typeof stepsArr);
-    
-  //   var re1 = new RegExp(/[^a-zA-Z0-9]+/i);
-  //   var re2 = new RegExp(/[a-zA-Z0-9]+/i);
-  
-  //   res.render('posts/result', {
-  //     name: recipeNam,
-  //     steps: req.body.steps
-  //     });
-  // });
-
-
-
 
   module.exports = router;
