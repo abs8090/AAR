@@ -1,5 +1,6 @@
 
 // first commit
+var timeDictionary = {"0":0, "5":5, "10":10};
 
 $(document).ready(function() {
 
@@ -9,7 +10,7 @@ $(document).ready(function() {
     ingss: [],
     steps: [],
     servings: null,
-    time: null,
+    time: 0,
     chef: null,
     category: null
   };
@@ -19,7 +20,7 @@ $(document).ready(function() {
 
     obj.name = $("#recipeName").val();
     obj.servings = $("#serving").val();
-    obj.time = $("#time").val();
+    obj.time = $("#timeList").val();
     obj.chef = $("#chef").val();
     obj.category = $("#category").val();
 

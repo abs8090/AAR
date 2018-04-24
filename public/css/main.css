@@ -55,3 +55,9 @@ input[type = "submit"]{
   color: white;
   height: 20pt;
 }
+
+select{
+  display: block;
+  margin: 0 auto;
+  width: 15%;
+}

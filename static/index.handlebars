@@ -25,21 +25,28 @@
       <label for="category">category:</label>
       <input type = "text" name = "category" id = "category"><br>
 
-      <label for="time">time :(change it to drop down menu later)</label>
-      <input type = "text" name = "time" id = "time"><br>
+      <label for="timeList">time :(change it to drop down menu later)</label>
+      <select id="timeList">
+        <option value="0">select time</option>
+        <option value="5">5 min or less</option>
+        <option value="10">10 min or less</option>
+        <option value="15">15 min or less</option>
+        <option value="20">20 min or less</option>
+        <option value="25">25 min or less</option>
+        <option value="30">30 min or less</option>
+        <option value="35">35 min or less</option>
+        <option value="40">40 min or less</option>
+        <option value="45">45 min or less</option>
+        <option value="50">50 min or less</option>
+        <option value="55">55 min or less</option>
+        <option value="60">60 min or less</option>
+      </select><br>
       
-      <input type = "submit" value = "submit" id="displayObj"/>
+      <input type = "submit" value = "submit" id="displayObj"/><br>
       <input type="button" onclick="location.href='/search';" value="go to search page" />
 
 
     </form>
-<label class="attemptsLabel">your attempts: </label>
-<ol id = "attempts">
-</ol>
-<footer>
-  <p>Student name: Abdulaziz Alhomaidhi</p>
-  <p>CWID: 10419107</p>
-</footer>
 
 <script type = "text/javascript" src = "./public/jquery.js"></script>
 <script type = "text/javascript" src = "./public/palindrome.js"></script>

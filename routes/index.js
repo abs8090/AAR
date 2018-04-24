@@ -80,22 +80,25 @@ router.get('/', (req,res)=>{
       //   title:"The Best Palindrome Checker in the World!"
       // });
       var recipeToSearchFor = req.body;
-      var desiredRecipesArr = []; 
-      var tempRecipeName = recipeToSearchFor.name;
-      var query = { name: tempRecipeName };
-      collection.f
-      desiredRecipesArr = await collection.find(query).toArray(function(err, result) {
-        if (err) throw err;
-        if(result.length === 0){
-          console.log("nothing returned");
-        }else{
-          
-          desiredRecipesArr = result;
-          console.log(desiredRecipesArr.length);
-        }
-        
-      });
-      
+      if(recipeToSearchFor.name !== ""){
+        var desiredRecipesArr = []; 
+        var tempRecipeName = recipeToSearchFor.name;
+        var query = { name: tempRecipeName };
+        collection.f
+        collection.find(query).toArray(function(err, result) {
+          if (err) throw err;
+          if(result.length === 0){
+            console.log("nothing returned");
+          }else{
+            
+            desiredRecipesArr = result;
+            console.log(desiredRecipesArr.length);
+          }
+        });
+      }else{
+        // search for recipe by other attributes
+      }
+ 
     // get all recipes:   
     //   await collection.find().toArray((err, recipes) =>{
     //     if(err) throw err;
