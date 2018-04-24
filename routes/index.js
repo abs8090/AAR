@@ -45,8 +45,6 @@ router.get('/', (req,res)=>{
     //   title:"The Best Palindrome Checker in the World!"
     // });
 
-    // console.log(req.body.name);
-
     var recipeToAdd = req.body;
     tempID = uuid();
     recipeToAdd._id = tempID;
@@ -61,10 +59,7 @@ router.get('/', (req,res)=>{
       // res.send({_id: info._id, title: info.title, ingredients: info.ingredients, steps: info.steps});
       console.log("number of documents added: "+ numAffected.insertedCount);
       // console.log(req.id);
-  });
-   // res.json({send : "data recieved", status: true}); //last line in this function
-    // recipeNam = req.body.recipeName;
-    // stepsArr = req.body.steps;
+    });
   });
 
   router.get('/search', (req,res)=>{
@@ -84,9 +79,6 @@ router.get('/', (req,res)=>{
       // res.render(path.resolve("static/index.handlebars"),{
       //   title:"The Best Palindrome Checker in the World!"
       // });
-      
-      // console.log(req.body.name);
-      
       var recipeToSearchFor = req.body;
       var desiredRecipesArr = []; 
       var tempRecipeName = recipeToSearchFor.name;

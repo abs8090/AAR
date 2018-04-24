@@ -1,6 +1,4 @@
 
-// first commit
-
 $(document).ready(function() {
 
   var obj = {
