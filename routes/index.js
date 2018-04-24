@@ -92,7 +92,7 @@ router.get('/', (req,res)=>{
           }else{
             
             desiredRecipesArr = result;
-            console.log(desiredRecipesArr.length);
+            console.log(desiredRecipesArr);
           }
         });
       }else{
