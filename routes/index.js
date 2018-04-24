@@ -79,23 +79,17 @@ router.get('/', (req,res)=>{
       // res.render(path.resolve("static/index.handlebars"),{
       //   title:"The Best Palindrome Checker in the World!"
       // });
-      var recipeToSearchFor = req.body;
-      var tempRecipeIng = recipeToSearchFor.name;
-      var desiredRecipesArr = [];
-      
+
       //seaarch by one ingredient only
-      collection.find({ingss: {$elemMatch: {name:tempRecipeIng}}}).toArray(function(err, result){
+      collection.find({ingss: {$elemMatch: {name:req.body.name}}}).toArray(function(err, result){
         if (err) throw err;
         if(result.length === 0){
           console.log("nothing returned");
-        }else{
-
-          desiredRecipesArr = result;
-          console.log(desiredRecipesArr);
         }
+        res.json({results : result, status: true}); //last line in this function
       });
 
-
+      
       // if(recipeToSearchFor.name !== ""){
       //   var desiredRecipesArr = []; 
       //   var tempRecipeName = recipeToSearchFor.name;
@@ -115,12 +109,6 @@ router.get('/', (req,res)=>{
       //   // search for recipe by other attributes
       // }
 
-
-
-
-
-
- 
     // get all recipes:   
     //   await collection.find().toArray((err, recipes) =>{
     //     if(err) throw err;
@@ -129,8 +117,6 @@ router.get('/', (req,res)=>{
     //     // console.log(typeof recipes);
     // });
     //   console.log("new message length: " + recipesArr.length);
-      
-      res.json({send : "data recieved", status: true}); //last line in this function
     });
 
   module.exports = router;
