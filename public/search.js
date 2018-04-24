@@ -30,26 +30,6 @@ $(document).ready(function() {
         });
     }
   });
-  
-  $("#checkIng").click(function (e){
-    e.preventDefault(e);
-    var temp = $("#ing").val();
-    $("#ingList").append("<li>"+ temp + "</li>");
-
-    // console.log(temp);
-    obj.ingss.push(temp);
-  });
-
-
-  $("#checkStep").click(function (e){
-    e.preventDefault(e);
-    var temp = $("#step").val();
-    $("#stepList").append("<li>"+ temp + "</li>");
-
-    // console.log(temp);
-    obj.steps.push(temp);
-  });
-
 });
 
 

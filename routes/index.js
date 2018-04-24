@@ -79,26 +79,31 @@ router.get('/', (req,res)=>{
       // });
     });
 
-    router.post('/search', async (req,res)=>{
+    router.post('/search', async (req,res)=>{ // here we search for all recipes with a specific name
         
       // res.render(path.resolve("static/index.handlebars"),{
       //   title:"The Best Palindrome Checker in the World!"
       // });
-  
+      
       // console.log(req.body.name);
-  
+      
       var recipeToSearchFor = req.body;
-      //var allProductsArray = db.products.find().toArray();
-      console.log(recipeToSearchFor.name);
-
-      collection.findOne({name: recipeToSearchFor.name}, (err, recipe) =>{
+      var desiredRecipesArr = []; 
+      var tempRecipeName = recipeToSearchFor.name;
+      var query = { name: tempRecipeName };
+      collection.f
+      desiredRecipesArr = await collection.find(query).toArray(function(err, result) {
+        if (err) throw err;
+        if(result.length === 0){
+          console.log("nothing returned");
+        }else{
+          
+          desiredRecipesArr = result;
+          console.log(desiredRecipesArr.length);
+        }
         
-        if(err) throw "err";
-        if(recipe === null) throw "no document found with this ID";
-        console.log(recipe);
-    });
-
-
+      });
+      
     // get all recipes:   
     //   await collection.find().toArray((err, recipes) =>{
     //     if(err) throw err;
