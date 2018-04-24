@@ -80,24 +80,46 @@ router.get('/', (req,res)=>{
       //   title:"The Best Palindrome Checker in the World!"
       // });
       var recipeToSearchFor = req.body;
-      if(recipeToSearchFor.name !== ""){
-        var desiredRecipesArr = []; 
-        var tempRecipeName = recipeToSearchFor.name;
-        var query = { name: tempRecipeName };
-        collection.f
-        collection.find(query).toArray(function(err, result) {
-          if (err) throw err;
-          if(result.length === 0){
-            console.log("nothing returned");
-          }else{
+      var tempRecipeIng = recipeToSearchFor.name;
+      var desiredRecipesArr = [];
+      
+      //seaarch by one ingredient only
+      collection.find({ingss: {$elemMatch: {name:tempRecipeIng}}}).toArray(function(err, result){
+        if (err) throw err;
+        if(result.length === 0){
+          console.log("nothing returned");
+        }else{
+
+          desiredRecipesArr = result;
+          console.log(desiredRecipesArr);
+        }
+      });
+
+
+      // if(recipeToSearchFor.name !== ""){
+      //   var desiredRecipesArr = []; 
+      //   var tempRecipeName = recipeToSearchFor.name;
+      //   var query = { name: tempRecipeName };
+        
+      //   collection.find(query).toArray(function(err, result) {
+      //     if (err) throw err;
+      //     if(result.length === 0){
+      //       console.log("nothing returned");
+      //     }else{
             
-            desiredRecipesArr = result;
-            console.log(desiredRecipesArr);
-          }
-        });
-      }else{
-        // search for recipe by other attributes
-      }
+      //       desiredRecipesArr = result;
+      //       console.log(desiredRecipesArr);
+      //     }
+      //   });
+      // }else{
+      //   // search for recipe by other attributes
+      // }
+
+
+
+
+
+
  
     // get all recipes:   
     //   await collection.find().toArray((err, recipes) =>{
