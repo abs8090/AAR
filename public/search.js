@@ -68,7 +68,7 @@ $(document).ready(function() {
                 // html+="<li>steps:<ul>";
                 // element.steps.forEach(step =>{
                 //   html+="<li>"+step + "</li>";
-                // });              
+                // });
                 // html+="</ul></li>";
                 // html+= "</ul>
                 // "</li>";
