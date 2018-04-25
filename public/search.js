@@ -1,58 +1,76 @@
+function mychange(){
+
+  console.log($('#search').val());
+  if($('#search').val() !== "time"){
+    $("#searchKeyword").show();
+    $("#label").show();
+    $("#time").hide();
+  }else{
+    $("#time").show();
+    $("#searchKeyword").hide();
+    $("#label").hide();
+    }
+  }
 
 $(document).ready(function() {
 
   var obj = {
-    name: null,
-    chef: null,
-    time: null,
-    ings: null
+    searchBy: null,
+    searchKeyword: null
   };
+
+  $("#searchKeyword").hide();
+  $("#label").hide();
+  $("#time").hide();
 
   $("form").submit(function(e){
     e.preventDefault(e);
 
-    obj.name = $("#recipeName").val();
-    obj.chef = $("#chef").val();
-    obj.time = $("#time").val();
-    obj.ings = $("#ings").val();
-
-    if (obj.name === ""){
-        alert("enter recipe name");
-        return;
-    }else {
-      
-        $.ajax({
-          type: "POST",
-          url: "/search",
-          data: obj,
-          success: function(data){
-            console.log(data);
-            var html = "";
-            data.results.forEach(element => {
-              html+="<li>"+element.name +"<ul>";
-              html+="<li>chef: "+element.chef +"</li>";
-              html+="<li>servings: "+element.servings +"</li>";
-              html+="<li>time: "+element.time +"</li>";
-              html+="<li>ingredients:<ul>";
-              element.ingss.forEach(ing =>{
-                html+="<li>"+ing.quantity+ " " +ing.name + "</li>";
-              });              
-              html+="</ul></li>";
-              html+="<li>steps:<ul>";
-              element.steps.forEach(step =>{
-                html+="<li>"+step + "</li>";
-              });              
-              html+="</ul></li>";
-              html+= "</ul></li>";
-            });
-            if(!data.results.length){
-              html = "no results found";
-            }
-            $("#results").html(html);
-          },
-          dataType: "json"
-        });
+    obj.searchBy = $("#search").val();
+    if(obj.searchBy === "0"){
+      $("#searchKeyword").hide();
+      $("#label").hide();
+      $("#time").hide();
+      alert("please, select search type");
+      return;
+    }else{
+        
+          $.ajax({
+            type: "POST",
+            url: "/search",
+            data: obj,
+            success: function(data){
+              console.log(data);
+              var html = "";
+              data.results.forEach(element => {
+                html+='<li> <a href = "/recipe/' + element._id+'">'+ element.name + '</a> </li>' 
+                
+                //"<ul>";
+                // html+="<li>chef: "+element.chef +"</li>";
+                // html+="<li>servings: "+element.servings +"</li>";
+                // html+="<li>time: "+element.time +"</li>";
+                // html+="<li>ingredients:<ul>";
+                // element.ingss.forEach(ing =>{
+                //   html+="<li>"+ing.quantity+ " " +ing.name + "</li>";
+                // });              
+                // html+="</ul></li>";
+                // html+="<li>steps:<ul>";
+                // element.steps.forEach(step =>{
+                //   html+="<li>"+step + "</li>";
+                // });              
+                // html+="</ul></li>";
+                // html+= "</ul>
+                // "</li>";
+              });
+              if(!data.results.length){
+                html = "no results found";
+              }
+              $("#results").html(html);
+            },
+            dataType: "json"
+          });
     }
+
   });
 });
 

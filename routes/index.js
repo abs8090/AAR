@@ -51,7 +51,7 @@ router.get('/', (req,res)=>{
     console.log(req.body);
     console.log("tempID: " + tempID);
     console.log("recipeToAdd._id: " + recipeToAdd._id);
-
+    recipeToAdd.time = parseInt(recipeToAdd.time);
     console.log("do database work here");
     collection.insert(recipeToAdd, (err, numAffected, recipe) =>{
       if(err) throw err;
@@ -60,6 +60,8 @@ router.get('/', (req,res)=>{
       console.log("number of documents added: "+ numAffected.insertedCount);
       // console.log(req.id);
     });
+
+    
   });
 
   router.get('/search', (req,res)=>{
@@ -79,15 +81,32 @@ router.get('/', (req,res)=>{
       // res.render(path.resolve("static/index.handlebars"),{
       //   title:"The Best Palindrome Checker in the World!"
       // });
+      console.log(req.body.searchBy + ": " + req.body.searchKeyword);
+
+      if(req.body.searchBy === "name"){
+        console.log("search by name"); 
+        console.log(req.body.searchKeyword);       
+      }else if(req.body.searchBy === "ingss"){
+        console.log("search by ingss");
+        console.log(req.body.searchKeyword); 
+      }else if(req.body.searchBy === "chef"){        
+        console.log("search by chef");
+        console.log(req.body.searchKeyword); 
+      }else{
+        console.log("search by time");
+        console.log(req.body.searchKeyword); 
+      }
+
+
 
       //seaarch by one ingredient only
-      collection.find({ingss: {$elemMatch: {name:req.body.name}}}).toArray(function(err, result){
-        if (err) throw err;
-        if(result.length === 0){
-          console.log("nothing returned");
-        }
-        res.json({results : result, status: true}); //last line in this function
-      });
+      // collection.find({ingss: {$elemMatch: {name:req.body.name}}}).toArray(function(err, result){
+      //   if (err) throw err;
+      //   if(result.length === 0){
+      //     console.log("nothing returned");
+      //   }
+      //   res.json({results : result, status: true}); //last line in this function
+      // });
 
       
       // if(recipeToSearchFor.name !== ""){
@@ -119,4 +138,14 @@ router.get('/', (req,res)=>{
     //   console.log("new message length: " + recipesArr.length);
     });
 
+    router.get('/recipe/:id', (req, res) => {
+
+      collection.findOne({_id:req.params.id}, (err, recipe) =>{
+        
+        if(err) throw "err";
+        if(recipe === null) throw "no document found with this ID";
+        res.send(recipe);
+    });
+      
+    })
   module.exports = router;

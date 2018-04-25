@@ -20,7 +20,7 @@ $(document).ready(function() {
 
     obj.name = $("#recipeName").val();
     obj.servings = $("#serving").val();
-    obj.time = $("#timeList").val();
+    obj.time = parseInt($("#timeList").val());
     obj.chef = $("#chef").val();
     obj.category = $("#category").val();
 
