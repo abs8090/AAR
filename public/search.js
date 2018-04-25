@@ -1,16 +1,21 @@
 function mychange(){
 
   console.log($('#search').val());
-  if($('#search').val() !== "time"){
+
+  if($('#search').val() === "name" || $('#search').val() === "ingss" || $('#search').val() === "chef"){
     $("#searchKeyword").show();
     $("#label").show();
     $("#time").hide();
-  }else{
+  }else if($('#search').val() === "time") {
     $("#time").show();
     $("#searchKeyword").hide();
     $("#label").hide();
-    }
+  }else{
+    $("#time").hide();
+    $("#searchKeyword").hide();
+    $("#label").hide();
   }
+}
 
 $(document).ready(function() {
 
@@ -28,12 +33,12 @@ $(document).ready(function() {
 
     obj.searchBy = $("#search").val();
     if(obj.searchBy === "0"){
+      $("#time").hide();
       $("#searchKeyword").hide();
       $("#label").hide();
-      $("#time").hide();
       alert("please, select search type");
       return;
-    }else{
+    }
         
           $.ajax({
             type: "POST",
@@ -69,7 +74,7 @@ $(document).ready(function() {
             },
             dataType: "json"
           });
-    }
+    
 
   });
 });
