@@ -81,61 +81,57 @@ router.get('/', (req,res)=>{
       // res.render(path.resolve("static/index.handlebars"),{
       //   title:"The Best Palindrome Checker in the World!"
       // });
-      console.log(req.body.searchBy + ": " + req.body.searchKeyword);
+      // console.log(req.body.searchBy + ": " + req.body.searchKeyword);
 
       if(req.body.searchBy === "name"){
         console.log("search by name"); 
-        console.log(req.body.searchKeyword);       
+        console.log(req.body.searchKeyword);  
+        console.log(typeof req.body.searchKeyword);   
+        var query = { name: req.body.searchKeyword };
+        collection.find(query).toArray(function(err, result) {
+          if (err) throw err;
+          if(result.length === 0){
+            console.log("nothing returned");
+            
+          }
+          res.json({results : result, status: true});
+          
+        });
+        
       }else if(req.body.searchBy === "ingss"){
         console.log("search by ingss");
         console.log(req.body.searchKeyword); 
+        console.log(typeof req.body.searchKeyword); 
+        collection.find({ingss: {$elemMatch: {name:req.body.searchKeyword}}}).toArray(function(err, result){
+        if (err) throw err;
+        if(result.length === 0){
+          console.log("nothing returned");
+        }
+        res.json({results : result, status: true}); //last line in this function
+      });
+
       }else if(req.body.searchBy === "chef"){        
         console.log("search by chef");
         console.log(req.body.searchKeyword); 
+        console.log(typeof req.body.searchKeyword); 
+
+        var query = { chef: req.body.searchKeyword };
+        
+        collection.find(query).toArray(function(err, result) {
+          if (err) throw err;
+          if(result.length === 0){
+            console.log("nothing returned");
+          }
+          res.json({results : result, status: true});          
+        });
+
       }else{
         console.log("search by time");
         console.log(req.body.searchKeyword); 
+        req.body.searchKeyword = parseInt(req.body.searchKeyword);
+        console.log(typeof req.body.searchKeyword);
       }
 
-
-
-      //seaarch by one ingredient only
-      // collection.find({ingss: {$elemMatch: {name:req.body.name}}}).toArray(function(err, result){
-      //   if (err) throw err;
-      //   if(result.length === 0){
-      //     console.log("nothing returned");
-      //   }
-      //   res.json({results : result, status: true}); //last line in this function
-      // });
-
-      
-      // if(recipeToSearchFor.name !== ""){
-      //   var desiredRecipesArr = []; 
-      //   var tempRecipeName = recipeToSearchFor.name;
-      //   var query = { name: tempRecipeName };
-        
-      //   collection.find(query).toArray(function(err, result) {
-      //     if (err) throw err;
-      //     if(result.length === 0){
-      //       console.log("nothing returned");
-      //     }else{
-            
-      //       desiredRecipesArr = result;
-      //       console.log(desiredRecipesArr);
-      //     }
-      //   });
-      // }else{
-      //   // search for recipe by other attributes
-      // }
-
-    // get all recipes:   
-    //   await collection.find().toArray((err, recipes) =>{
-    //     if(err) throw err;
-    //     recipesArr = recipes;
-    //     // console.log("recipes length: " + recipes.length);
-    //     // console.log(typeof recipes);
-    // });
-    //   console.log("new message length: " + recipesArr.length);
     });
 
     router.get('/recipe/:id', (req, res) => {

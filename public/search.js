@@ -1,3 +1,4 @@
+
 function mychange(){
 
   console.log($('#search').val());
@@ -33,17 +34,21 @@ $(document).ready(function() {
 
     obj.searchBy = $("#search").val();
     if(obj.searchBy === "0"){
-      $("#time").hide();
-      $("#searchKeyword").hide();
-      $("#label").hide();
+
       alert("please, select search type");
       return;
-    }
-        
-          $.ajax({
-            type: "POST",
-            url: "/search",
-            data: obj,
+
+    }else if(obj.searchBy === "name" || obj.searchBy === "ingss" || obj.searchBy === "chef"){
+
+      obj.searchKeyword = $("#searchKeyword").val();
+
+    }else if(obj.searchBy === "time") {
+      obj.searchKeyword = $("#time").val();
+    }        
+      $.ajax({
+        type: "POST",
+        url: "/search",
+        data: obj,
             success: function(data){
               console.log(data);
               var html = "";
