@@ -55,6 +55,7 @@ $(document).ready(function() {
               data.results.forEach(element => {
                 html+='<li> <a href = "/recipe/' + element._id+'">'+ element.name + '</a> </li>' 
                 
+                // please, don't delete this list of comments, we may need it and it was so hard to figure out!!
                 //"<ul>";
                 // html+="<li>chef: "+element.chef +"</li>";
                 // html+="<li>servings: "+element.servings +"</li>";
