@@ -1,0 +1,28 @@
+
+
+<h5>recipe name: {{this.name}}</h5>
+
+ingredients:<ul>
+{{#each this.ingss as |ingss|}}
+  <li>
+    <h5>name: {{ingss.name}}:</h5> 
+    <h5>quantity: {{ingss.quantity}}</h5>
+  </li>
+{{/each}}
+</ul>
+
+
+<h5>servings: {{this.servings}}</h5>
+<h5>chef: {{this.chef}}</h5>
+<h5>time: {{this.time}} minutes</h5>
+
+steps:<ol>
+{{#each this.steps as |step|}}
+  <li>
+    {{step.}}
+  </li>
+{{/each}}
+</ol>
+
+
+ 

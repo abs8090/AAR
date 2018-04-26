@@ -140,7 +140,17 @@ router.get('/', (req,res)=>{
         
         if(err) throw "err";
         if(recipe === null) throw "no document found with this ID";
-        res.send(recipe);
+        
+        res.render(path.resolve("views/posts/recipeInfo.handlebars"),{
+          title:"recipe info page!",
+          name: recipe.name,
+          ingss: recipe.ingss,
+          servings: recipe.servings,
+          chef: recipe.chef,
+          time: recipe.time,
+          steps: recipe.steps
+        }); 
+        // res.json({results : recipe, status: true}); 
     });
       
     })
