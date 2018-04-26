@@ -130,6 +130,30 @@ router.get('/', (req,res)=>{
         console.log(req.body.searchKeyword); 
         req.body.searchKeyword = parseInt(req.body.searchKeyword);
         console.log(typeof req.body.searchKeyword);
+        //.find( { qty: { $lt: 20 } } )
+        if(req.body.searchKeyword < 60){
+
+          var query = req.body.searchKeyword;
+          collection.find({ time: { $lte: query } }).toArray(function(err, result) {
+            if (err) throw err;
+            if(result.length === 0){
+              console.log("nothing returned");
+            }
+            res.json({results : result, status: true});          
+          });
+        
+        }else {
+          
+          var query = req.body.searchKeyword;
+          collection.find({ time: { $gte: query } }).toArray(function(err, result) {
+            if (err) throw err;
+            if(result.length === 0){
+              console.log("nothing returned");
+            }
+            res.json({results : result, status: true});          
+          });
+        }
+
       }
 
     });
