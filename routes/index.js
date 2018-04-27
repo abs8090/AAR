@@ -31,7 +31,7 @@ var recipesArr = [];
 
 router.get('/', (req,res)=>{
 
-  res.render(path.resolve("static/index.handlebars"),{
+  res.render("index",{
     title:"The Best Palindrome Checker in the World!"
   });    
     // res.status(403).render(path.resolve("static/index.handlebars"),{
@@ -68,7 +68,7 @@ router.get('/', (req,res)=>{
 
     console.log("search page");
     console.log(req.body);
-    res.render(path.resolve("views/posts/search.handlebars"),{
+    res.render("search",{
       title:"search page!"
     });    
       // res.status(403).render(path.resolve("static/index.handlebars"),{
@@ -165,17 +165,31 @@ router.get('/', (req,res)=>{
         if(err) throw "err";
         if(recipe === null) throw "no document found with this ID";
         
-        res.render(path.resolve("views/posts/recipeInfo.handlebars"),{
+        res.render("recipeInfo",{
           title:"recipe info page!",
+          id: recipe._id,
           name: recipe.name,
           ingss: recipe.ingss,
           servings: recipe.servings,
           chef: recipe.chef,
           time: recipe.time,
-          steps: recipe.steps
+          steps: recipe.steps,
+          comments: recipe.comments
         }); 
         // res.json({results : recipe, status: true}); 
     });
       
-    })
+    });
+
+    router.patch('/recipe/:id', (req,res)=>{
+
+      console.log(req.body);
+      collection.update(
+        { _id: req.body.id},
+        { $push: { comments: req.body.comments } }
+     );
+  
+    });
+
+
   module.exports = router;

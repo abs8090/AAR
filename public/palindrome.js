@@ -12,7 +12,8 @@ $(document).ready(function() {
     servings: null,
     time: 0,
     chef: null,
-    category: null
+    category: null,
+    comments: []
   };
 
   $("form").submit(function(e){
@@ -23,6 +24,7 @@ $(document).ready(function() {
     obj.time = parseInt($("#timeList").val());
     obj.chef = $("#chef").val();
     obj.category = $("#category").val();
+    // obj.comments.push(" ");
 
     console.log(obj);
     $.ajax({
