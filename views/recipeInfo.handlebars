@@ -24,13 +24,13 @@ steps:<ol id="step">
 {{/each}}
 </ol>
 
-comments:<ol id="comments"></ol>
+comments:<ol id="comments">
 {{#each this.comments as |comment|}}
   <li>
     {{comment.}}
   </li>
 {{/each}}
-
+</ol>
     <input type = "text" name = "comment" id = "comment"><br>
     <input type = "submit" value = "submit" id="submitComment"/><br>
 </form>
