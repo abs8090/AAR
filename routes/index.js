@@ -31,7 +31,7 @@ var recipesArr = [];
 
 router.get('/', (req,res)=>{
 
-  res.render("index",{
+  res.render("login",{
     title:"The Best Palindrome Checker in the World!"
   });    
     // res.status(403).render(path.resolve("static/index.handlebars"),{
