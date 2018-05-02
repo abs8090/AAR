@@ -29,7 +29,7 @@ $(document).ready(function() {
     console.log(obj);
     $.ajax({
       type: "POST",
-      url: "/",
+      url: "/upload",
       data: obj,
       success: function(data){
         console.log("my data: " + data.send);

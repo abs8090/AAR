@@ -1,6 +1,8 @@
 
 body {
   background-color: peachpuff;
+  color:#722f37;
+
 }
 
 title {
@@ -9,7 +11,7 @@ title {
 h1{
   text-align: center;
   font-size: 30pt;
-  color:rgb(255, 0, 0);
+  color:#722f37;
 }
 
 li.is-palindrome{
@@ -54,6 +56,8 @@ input[type = "submit"]{
   background-color: blue;
   color: white;
   height: 20pt;
+  font-variant: small-caps;
+  font-size: 15px;
 }
 
 select{

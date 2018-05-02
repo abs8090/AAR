@@ -33,23 +33,25 @@ var recipesArr = [];
 
 router.get('/', (req,res)=>{
 
-  if(req.body === "" || req.body === undefined){
-  res.render("login",{
-    title:"Log In"
-  });    
-}else{
-  res.redirect("newUser");
-}
+  res.redirect("login");
     // res.status(403).render(path.resolve("static/index.handlebars"),{
     //   title:"The Best Palindrome Checker in the World!"
     // });
-
-
-
-
   });
 
-  router.post('/', (req,res)=>{
+  router.get('/upload', (req,res)=>{
+        
+    // res.render(path.resolve("static/index.handlebars"),{
+    //   title:"The Best Palindrome Checker in the World!"
+    // });
+    res.render("index",{
+      title:"upload recipe"
+      //Add res.status //////////////////////////////
+    });
+  });
+
+
+  router.post('/upload', (req,res)=>{
         
     // res.render(path.resolve("static/index.handlebars"),{
     //   title:"The Best Palindrome Checker in the World!"
@@ -70,14 +72,35 @@ router.get('/', (req,res)=>{
       console.log("number of documents added: "+ numAffected.insertedCount);
       // console.log(req.id);
     });
-
-    
   });
+
   router.get('/login', (req,res)=>{
     res.render("login",{
       title:"Login"
+      //Add res.status //////////////////////////////
     });
   });
+
+  router.post('/login', async (req,res)=>{
+
+    // console.log(req.body);
+
+    var query = { username: req.body.username };
+    // const allUsers = await usersCollection.find({}).toArray();
+    // console.log(allUsers);
+    usersCollection.find(query).toArray(function(err, result) {
+      if (err) throw err;
+      if(result.length === 0){
+        console.log("nothing returned");
+        
+      }else {
+        console.log(result);
+      }
+      res.json({results : result, status: true});
+      
+    });
+
+    });
 
 
   router.get('/newUser', (req,res)=>{
@@ -245,21 +268,21 @@ router.get('/', (req,res)=>{
 
 
 //GET
-app.get('/', async (req, res) => {
-  try {
-      //let isSet = req.cookies['AuthCookie'];
-      //if cookie for user redirect to private page
-      if (req.hasOwnProperty(true)){     ///////////////////COOKIE 
-           res.redirect("/upload")
-      }else{
-          //else render the login page
-          res.render('user/login')
-      }
+// app.get('/', async (req, res) => {
+//   try {
+//       //let isSet = req.cookies['AuthCookie'];
+//       //if cookie for user redirect to private page
+//       if (req.hasOwnProperty(true)){     ///////////////////COOKIE 
+//            res.redirect("/upload")
+//       }else{
+//           //else render the login page
+//           res.render('user/login')
+//       }
 
-  } catch (err) {
-        res.status(403).json({ Error: "Not found" });
-  }
-    });
+//   } catch (err) {
+//         res.status(403).json({ Error: "Not found" });
+//   }
+//     });
 
 
 
