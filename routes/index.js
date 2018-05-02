@@ -44,7 +44,7 @@ router.get('/', (req,res)=>{
     // res.render(path.resolve("static/index.handlebars"),{
     //   title:"The Best Palindrome Checker in the World!"
     // });
-    res.render("index",{
+    res.render("upload",{
       title:"upload recipe"
       //Add res.status //////////////////////////////
     });
@@ -104,35 +104,35 @@ router.get('/', (req,res)=>{
 
 
   router.get('/newUser', (req,res)=>{
-    res.render("newUser",{
-      title:"New User"
-    });
+     res.render("newUser",{
+       title:"New User"
+     });
   });
 
-  router.post('/newUser', (req,res)=>{
-        
-    // res.render(path.resolve("static/index.handlebars"),{
-    //   title:"The Best Palindrome Checker in the World!"
-    // });
-
-    var userToAdd = req.body;
-    tempID = uuid();
-    userToAdd._id = tempID;
-    console.log(req.body);
-    console.log("tempID: " + tempID);
-    console.log("userToAdd._id: " + userToAdd._id);
-  
+  router.post('/newUser', async (req,res)=>{
     
-    usersCollection.insert(userToAdd, (err, numAffected, user) =>{
-      if(err) throw err;
-      if(numAffected.insertedCount !== 1) throw "error occured while adding";
-      // res.send({_id: info._id, title: info.title, ingredients: info.ingredients, steps: info.steps});
-      console.log("number of documents added: "+ numAffected.insertedCount);
-      // console.log(req.id);
-    });
+    res.redirect("/upload");
+    // var isTaken = false;
+    // var count = 0;
 
-    
-  });
+    //   var query = { username: req.body.username };
+
+    //   const tempResult = await usersCollection.find(query).toArray();
+    //   if (tempResult.length === 0 ){
+    //     console.log("OK");
+
+    //     var userToAdd = req.body;
+    //     tempID = uuid();
+    //     userToAdd._id = tempID;
+    //   await usersCollection.insert(userToAdd);
+
+
+    //   }else{
+    //     console.log("Not OK");        
+    //   }
+      
+         
+  }); //end newUser post
 
 
 
