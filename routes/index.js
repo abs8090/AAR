@@ -7,12 +7,14 @@ var MC = require('mongodb').MongoClient;
 const uuid = require('uuid/v4');
 var tempID = uuid();
 var collection;
+var usersCollection;
 
 MC.connect("mongodb://localhost:27017/", function(err, db) {
     if(err) { return console.dir(err); }
   
     var database = db.db("AAR");
     collection = database.collection('recipes');
+    usersCollection = database.collection('users');
 });
 
 
@@ -31,12 +33,20 @@ var recipesArr = [];
 
 router.get('/', (req,res)=>{
 
+  if(req.body === "" || req.body === undefined){
   res.render("login",{
-    title:"The Best Palindrome Checker in the World!"
+    title:"Log In"
   });    
+}else{
+  res.redirect("newUser");
+}
     // res.status(403).render(path.resolve("static/index.handlebars"),{
     //   title:"The Best Palindrome Checker in the World!"
     // });
+
+
+
+
   });
 
   router.post('/', (req,res)=>{
@@ -63,13 +73,52 @@ router.get('/', (req,res)=>{
 
     
   });
+  router.get('/login', (req,res)=>{
+    res.render("login",{
+      title:"Login"
+    });
+  });
+
+
+  router.get('/newUser', (req,res)=>{
+    res.render("newUser",{
+      title:"New User"
+    });
+  });
+
+  router.post('/newUser', (req,res)=>{
+        
+    // res.render(path.resolve("static/index.handlebars"),{
+    //   title:"The Best Palindrome Checker in the World!"
+    // });
+
+    var userToAdd = req.body;
+    tempID = uuid();
+    userToAdd._id = tempID;
+    console.log(req.body);
+    console.log("tempID: " + tempID);
+    console.log("userToAdd._id: " + userToAdd._id);
+  
+    
+    usersCollection.insert(userToAdd, (err, numAffected, user) =>{
+      if(err) throw err;
+      if(numAffected.insertedCount !== 1) throw "error occured while adding";
+      // res.send({_id: info._id, title: info.title, ingredients: info.ingredients, steps: info.steps});
+      console.log("number of documents added: "+ numAffected.insertedCount);
+      // console.log(req.id);
+    });
+
+    
+  });
+
+
 
   router.get('/search', (req,res)=>{
 
     console.log("search page");
     console.log(req.body);
     res.render("search",{
-      title:"search page!"
+      title:"Search Page!"
     });    
       // res.status(403).render(path.resolve("static/index.handlebars"),{
       //   title:"The Best Palindrome Checker in the World!"
@@ -190,6 +239,29 @@ router.get('/', (req,res)=>{
      );
   
     });
+
+  //USER
+
+
+
+//GET
+app.get('/', async (req, res) => {
+  try {
+      //let isSet = req.cookies['AuthCookie'];
+      //if cookie for user redirect to private page
+      if (req.hasOwnProperty(true)){     ///////////////////COOKIE 
+           res.redirect("/upload")
+      }else{
+          //else render the login page
+          res.render('user/login')
+      }
+
+  } catch (err) {
+        res.status(403).json({ Error: "Not found" });
+  }
+    });
+
+
 
 
   module.exports = router;
