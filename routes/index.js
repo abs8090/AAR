@@ -4,6 +4,8 @@ const path = require("path");
 const bodyParser = require('body-parser');
 const express = require("express");
 var MC = require('mongodb').MongoClient;
+const bcrypt = require("bcrypt");
+const saltRound = 1;
 const uuid = require('uuid/v4');
 var tempID = uuid();
 var collection;
@@ -84,21 +86,27 @@ router.get('/', (req,res)=>{
   router.post('/login', async (req,res)=>{
 
     // console.log(req.body);
-
-    var query = { username: req.body.username };
+    var  user = req.body;
+    var query = { username: user.username };
     // const allUsers = await usersCollection.find({}).toArray();
     // console.log(allUsers);
-    usersCollection.find(query).toArray(function(err, result) {
-      if (err) throw err;
-      if(result.length === 0){
-        console.log("nothing returned");
-        
-      }else {
-        console.log(result);
+    const tempResult = await usersCollection.find(query).toArray();
+    if(tempResult.length === 0 ){
+      console.log("username doesn't exist");
+    }else{
+      var userToCompareWith = tempResult[0];
+      console.log(userToCompareWith);
+      console.log(user.hashedPass)
+      console.log("2", userToCompareWith.hashedPass)
+      console.log(user.password)
+
+      var compareHash = await bcrypt.compare(user.password, userToCompareWith.hashedPass);
+      if(compareHash){
+        console.log("passwords match");
+      }else{
+        console.log("please check your password");
       }
-      res.json({results : result, status: true});
-      
-    });
+    }
 
     });
 
@@ -110,26 +118,30 @@ router.get('/', (req,res)=>{
   });
 
   router.post('/newUser', async (req,res)=>{
-    
-    res.redirect("/upload");
-    // var isTaken = false;
-    // var count = 0;
+  
+      var query = { username: req.body.username };
 
-    //   var query = { username: req.body.username };
+      const tempResult = await usersCollection.find(query).toArray();
+      if (tempResult.length === 0 ){
+        console.log("OK");
 
-    //   const tempResult = await usersCollection.find(query).toArray();
-    //   if (tempResult.length === 0 ){
-    //     console.log("OK");
+        var userToAdd = req.body;
+        tempID = uuid();
+        userToAdd._id = tempID;
+        userToAdd.hashedPass = await bcrypt.hash(userToAdd.hashedPass, saltRound);
+        usersCollection.insert(userToAdd, (err, numAffected, userToAdd) =>{
+          if(err) throw err;
+          if(numAffected.insertedCount !== 1) throw "error occured while adding";
+          // res.send({_id: info._id, title: info.title, ingredients: info.ingredients, steps: info.steps});
+          console.log("number of documents added: "+ numAffected.insertedCount);
+          // console.log(req.id);
+        });
+        res.end();
 
-    //     var userToAdd = req.body;
-    //     tempID = uuid();
-    //     userToAdd._id = tempID;
-    //   await usersCollection.insert(userToAdd);
-
-
-    //   }else{
-    //     console.log("Not OK");        
-    //   }
+      }else{
+        console.log("Not OK");   
+        res.end();     
+      }
       
          
   }); //end newUser post
