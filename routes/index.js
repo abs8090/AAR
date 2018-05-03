@@ -78,6 +78,7 @@ router.get('/', (req,res)=>{
   }
 
   //r
+
     // res.status(403).render(path.resolve("static/index.handlebars"),{
     //   title:"The Best Palindrome Checker in the World!"
     // });
@@ -291,7 +292,7 @@ router.post('/upload', (req,res)=>{
         console.log("search by name"); 
         console.log(req.body.searchKeyword);  
         console.log(typeof req.body.searchKeyword);   
-        var query = { name: req.body.searchKeyword };
+        var query = { name: req.body.searchKeyword };     ///xss works here?
         collection.find(query).toArray(function(err, result) {
           if (err) throw err;
           if(result.length === 0){
