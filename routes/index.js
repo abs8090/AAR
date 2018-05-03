@@ -31,72 +31,80 @@ router.use(bodyParser.json());
 
 app.engine('handlebars', handelBar({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
-app.use(cookieParser());
-app.use(bodyParser.json()); 
+router.use(cookieParser());
+router.use(bodyParser.json()); 
 
 var recipeNam = "";
 var stepsArr = [];
 var recipesArr = [];
 
+///////////////// USER ROUTES /////////////////
+
 router.use( async(req, res, next) => {
   console.log("Middleware")
+  delete req.thisUser;
 
-  if(req.cookies['AuthCookie']){
-    //check if user has cookie in session //////////////////////////////////////////////////////
+  if(req.cookies['AuthCookie'] !== undefined){
+    
+    console.log("we have a cookie");
+    let tempSession = req.cookies['AuthCookie']
+    var query = { session:  tempSession};
+    //console.log(query.session);
+   // console.log(tempSession);
 
+    const tempResult = await usersCollection.find(query).toArray();
+    if(tempResult.length === 0 ){
+      console.log("username doesn't exist");
+    }else{
+      var tempUser = tempResult[0];
+      req.thisUser = tempResult[0];
+      //console.log(tempResult.length);
+      //console.log(tempUser.username);
+    }
+  }else{
+    console.log("Mid 70");
   }
-
   next()
     });
 
 router.get('/', (req,res)=>{
 
-  res.redirect("login");
+  try{ 
+    if(req.hasOwnProperty("thisUser")){
+      res.redirect("/upload");
+    }else{
+      res.redirect("login");
+    }
+  } catch (err){
+    res.status(403).json({ Error: "Not found" });
+  }
+
+  //r
     // res.status(403).render(path.resolve("static/index.handlebars"),{
     //   title:"The Best Palindrome Checker in the World!"
     // });
   });
 
-  router.get('/upload', (req,res)=>{
-        
-    // res.render(path.resolve("static/index.handlebars"),{
-    //   title:"The Best Palindrome Checker in the World!"
-    // });
-    res.render("upload",{
-      title:"upload recipe"
-      //Add res.status //////////////////////////////
-    });
-  });
 
-
-  router.post('/upload', (req,res)=>{
-        
-    // res.render(path.resolve("static/index.handlebars"),{
-    //   title:"The Best Palindrome Checker in the World!"
-    // });
-
-    var recipeToAdd = req.body;
-    tempID = uuid();
-    recipeToAdd._id = tempID;
-    console.log(req.body);
-    console.log("tempID: " + tempID);
-    console.log("recipeToAdd._id: " + recipeToAdd._id);
-    recipeToAdd.time = parseInt(recipeToAdd.time);
-    console.log("do database work here");
-    collection.insert(recipeToAdd, (err, numAffected, recipe) =>{
-      if(err) throw err;
-      if(numAffected.insertedCount !== 1) throw "error occured while adding";
-      // res.send({_id: info._id, title: info.title, ingredients: info.ingredients, steps: info.steps});
-      console.log("number of documents added: "+ numAffected.insertedCount);
-      // console.log(req.id);
-    });
-  });
 
   router.get('/login', (req,res)=>{
-    res.render("login",{
-      title:"Login"
-      //Add res.status //////////////////////////////
-    });
+  
+
+
+    try{ 
+      if(req.hasOwnProperty("thisUser")){
+        res.redirect('upload');
+
+      }else{
+        res.render("login",{
+          title:"Login"
+        });
+        
+      }
+    } catch (err){
+      res.status(403).json({ Error: "Not found" });
+    }
+    
   });
 
   router.post('/login', async (req,res)=>{
@@ -119,6 +127,20 @@ router.get('/', (req,res)=>{
       var compareHash = await bcrypt.compare(user.password, userToCompareWith.hashedPass);
       if(compareHash){
         console.log("passwords match");
+        const expiresAt = new Date();
+        expiresAt.setHours(expiresAt.getHours() + 1);
+
+        const sessionID = uuid();
+        res.cookie("AuthCookie", sessionID, { expires: expiresAt });
+        //user.session = sessionID 
+        usersCollection.update({username:user.username}, {$set: {session:sessionID}});
+        //users[x].sessions.push(sessionID)
+                
+       // res.redirect("/upload");
+       res.redirect(307, '/upload');
+
+
+
       }else{
         console.log("please check your password");
       }
@@ -128,9 +150,18 @@ router.get('/', (req,res)=>{
 
 
   router.get('/newUser', (req,res)=>{
-     res.render("newUser",{
-       title:"New User"
-     });
+    try{ 
+      if(req.hasOwnProperty("thisUser")){   /////////////////DO WE WANT THIS?
+        res.redirect("/upload");
+      }else{
+        res.render("newUser",{
+          title:"New User"
+        });
+      }
+    } catch (err){
+      res.status(403).json({ Error: "Not found" });
+    }
+     
   });
 
   router.post('/newUser', async (req,res)=>{
@@ -160,17 +191,92 @@ router.get('/', (req,res)=>{
       }
       
          
-  }); //end newUser post
+    }); //end newUser post
+
+    router.get('/logout', async (req, res) => {
+      try{
+        const anHourAgo = new Date();
+        anHourAgo.setHours(anHourAgo.getHours() - 1);
+        res.cookie("AuthCookie", "", {expires: anHourAgo})
+        res.clearCookie("AuthCookie");
+        res.render('user/logout');
+      }catch (err) {
+        res.status(403).json({ Error: "Logout Failed" });
+      }
+    });
 
 
 ///////////////// RECIPE ROUTES /////////////////
+
+
+router.get('/upload', (req,res)=>{
+  try{ 
+    if(req.hasOwnProperty("thisUser")){   
+      res.render("upload",{
+        title:"upload recipe"
+      });
+    }else{
+      res.render("newUser",{
+        title:"New User"
+      });
+    }
+  } catch (err){
+    res.status(403).json({ Error: "Not found" });
+  }
+
+  
+        
+  // res.render(path.resolve("static/index.handlebars"),{
+  //   title:"The Best Palindrome Checker in the World!"
+  // });
+
+});
+
+
+router.post('/upload', (req,res)=>{
+      
+  // res.render(path.resolve("static/index.handlebars"),{
+  //   title:"The Best Palindrome Checker in the World!"
+  // });
+
+  var recipeToAdd = req.body;
+  tempID = uuid();
+  recipeToAdd._id = tempID;
+  console.log(req.body);
+  console.log("tempID: " + tempID);
+  console.log("recipeToAdd._id: " + recipeToAdd._id);
+  recipeToAdd.time = parseInt(recipeToAdd.time);
+  console.log("do database work here");
+  collection.insert(recipeToAdd, (err, numAffected, recipe) =>{
+    if(err) throw err;
+    if(numAffected.insertedCount !== 1) throw "error occured while adding";
+    // res.send({_id: info._id, title: info.title, ingredients: info.ingredients, steps: info.steps});
+    console.log("number of documents added: "+ numAffected.insertedCount);
+    // console.log(req.id);
+  });
+});
+
   router.get('/search', (req,res)=>{
 
-    console.log("search page");
+    try{ 
+      if(req.hasOwnProperty("thisUser")){   
+            console.log("search page");
     console.log(req.body);
     res.render("search",{
       title:"Search Page!"
-    });    
+    }); 
+      }else{
+        res.render("newUser",{
+          title:"New User"
+        });
+      }
+    } catch (err){
+      res.status(403).json({ Error: "Not found" });
+    }
+
+    
+
+   
       // res.status(403).render(path.resolve("static/index.handlebars"),{
       //   title:"The Best Palindrome Checker in the World!"
       // });
