@@ -1,31 +1,31 @@
 
-    <h1>Upload a recipe</h1>
+    <h1>Upload A Recipe</h1>
     <form id="form_id" method = "POST">
       
-      <label for="Userphrase">recipe name:</label>
+      <label for="Userphrase">Recipe Name:</label>
       <input type = "text" name = "recipeName" id = "recipeName"><br>
       
-      <label for="ing">ingredients:(enter one ingredients at a time, then click the button below it)</label>
-      <input type = "text" name = "ingredients" id = "ing"><br>
-      <input type = "text" name = "quantity" id = "quantity"><br>
+      <label for="ing">Ingredients: Enter one ingredient at a time then click the button below to add it to your recipe.</label>
+      <input type = "text" name = "ingredients" id = "ing" placeholder = "ingredient name"><br>
+      <input type = "text" name = "quantity" id = "quantity" placeholder = "amount to be added"><br>
       <input type = "button" value = "add ingredient" id="checkIng" /><br>
       <ol id="ingList"></ol>
 
-      <label for="steps">steps:(enter one step at a time, then click the button below it)</label>
+      <label for="steps">Steps: Enter one step at a time then click the button below to add it to your recipe.</label>
       <input type = "text" name = "steps" id = "step"><br>
       <input type = "button" value = "add step" id="checkStep" /><br>
        <ol id="stepList"></ol>
        
-      <label for="servings">servings:</label>
+      <label for="servings">Servings:</label>
       <input type = "text" name = "servings" id = "serving"><br>
 
-      <label for="chef">chef:</label>
+      <label for="chef">Chef:</label>
       <input type = "text" name = "chef" id = "chef"><br>
 
       <label for="category">category:</label>
       <input type = "text" name = "category" id = "category"><br>
 
-      <label for="timeList">time :(change it to drop down menu later)</label>
+      <label for="timeList">Time:</label>
       <select id="timeList">
         <option value=0>select time</option>
         <option value=5>5 min or less</option>
