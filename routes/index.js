@@ -7,6 +7,7 @@ var MC = require('mongodb').MongoClient;
 const uuid = require('uuid/v4');
 var tempID = uuid();
 var collection;
+var xss = require('xss');
 
 MC.connect("mongodb://localhost:27017/", function(err, db) {
     if(err) { return console.dir(err); }
@@ -87,7 +88,7 @@ router.get('/', (req,res)=>{
         console.log("search by name"); 
         console.log(req.body.searchKeyword);  
         console.log(typeof req.body.searchKeyword);   
-        var query = { name: req.body.searchKeyword };
+        var query = { name: req.body.searchKeyword };     ///xss works here?
         collection.find(query).toArray(function(err, result) {
           if (err) throw err;
           if(result.length === 0){
