@@ -32,7 +32,6 @@ $(document).ready(function() {
             data: user,
             success: function(data){
                   console.log(data);
-    
                 },
                 dataType: "json"
               });

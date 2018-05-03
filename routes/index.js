@@ -5,11 +5,14 @@ const bodyParser = require('body-parser');
 const express = require("express");
 var MC = require('mongodb').MongoClient;
 const bcrypt = require("bcrypt");
-const saltRound = 1;
+const saltRound = 10;
 const uuid = require('uuid/v4');
 var tempID = uuid();
 var collection;
 var usersCollection;
+const cookieParser = require("cookie-parser");
+
+
 
 MC.connect("mongodb://localhost:27017/", function(err, db) {
     if(err) { return console.dir(err); }
@@ -28,10 +31,23 @@ router.use(bodyParser.json());
 
 app.engine('handlebars', handelBar({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
+app.use(cookieParser());
+app.use(bodyParser.json()); 
 
 var recipeNam = "";
 var stepsArr = [];
 var recipesArr = [];
+
+router.use( async(req, res, next) => {
+  console.log("Middleware")
+
+  if(req.cookies['AuthCookie']){
+    //check if user has cookie in session //////////////////////////////////////////////////////
+
+  }
+
+  next()
+    });
 
 router.get('/', (req,res)=>{
 
@@ -147,7 +163,7 @@ router.get('/', (req,res)=>{
   }); //end newUser post
 
 
-
+///////////////// RECIPE ROUTES /////////////////
   router.get('/search', (req,res)=>{
 
     console.log("search page");
@@ -275,7 +291,7 @@ router.get('/', (req,res)=>{
   
     });
 
-  //USER
+  
 
 
 
