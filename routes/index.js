@@ -12,8 +12,6 @@ var collection;
 var usersCollection;
 const cookieParser = require("cookie-parser");
 
-
-
 MC.connect("mongodb://localhost:27017/", function(err, db) {
     if(err) { return console.dir(err); }
   
