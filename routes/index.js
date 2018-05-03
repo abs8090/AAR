@@ -5,12 +5,13 @@ const bodyParser = require('body-parser');
 const express = require("express");
 var MC = require('mongodb').MongoClient;
 const bcrypt = require("bcrypt");
-const saltRound = 10;
+const saltRound = 1;
 const uuid = require('uuid/v4');
 var tempID = uuid();
 var collection;
 var usersCollection;
 const cookieParser = require("cookie-parser");
+var xss = require('xss');
 
 MC.connect("mongodb://localhost:27017/", function(err, db) {
     if(err) { return console.dir(err); }
@@ -36,9 +37,20 @@ var recipeNam = "";
 var stepsArr = [];
 var recipesArr = [];
 
+
+//////////////// XSS CODE??? ////////////////
+
+const sanitize = (str) => {
+	return xss(str, {
+		whiteList: [],
+		stripIgnoreTag: true,
+		stripIgnoreTagBody: ['script', 'style']
+	});
+}
+
 ///////////////// USER ROUTES /////////////////
 
-router.use( async(req, res, next) => {
+router.use( async(req, res, next) => {   /////NO XSS NEEDED
   console.log("Middleware")
   delete req.thisUser;
 
@@ -65,7 +77,7 @@ router.use( async(req, res, next) => {
   next()
     });
 
-router.get('/', (req,res)=>{
+router.get('/', (req,res)=>{   /////NO XSS NEEDED
 
   try{ 
     if(req.hasOwnProperty("thisUser")){
@@ -86,7 +98,7 @@ router.get('/', (req,res)=>{
 
 
 
-  router.get('/login', (req,res)=>{
+  router.get('/login', (req,res)=>{  /////NO XSS NEEDED
   
 
 
@@ -106,11 +118,11 @@ router.get('/', (req,res)=>{
     
   });
 
-  router.post('/login', async (req,res)=>{
+  router.post('/login', async (req,res)=>{ ////NEED TO ADD XSS
 
     // console.log(req.body);
     var  user = req.body;
-    var query = { username: user.username };
+    var query = { username: user.username };  //CHANGE TO REQ.BODY.USERNAME??
     // const allUsers = await usersCollection.find({}).toArray();
     // console.log(allUsers);
     const tempResult = await usersCollection.find(query).toArray();
@@ -148,7 +160,7 @@ router.get('/', (req,res)=>{
     });
 
 
-  router.get('/newUser', (req,res)=>{
+  router.get('/newUser', (req,res)=>{  /////NO XSS NEEDED
     try{ 
       if(req.hasOwnProperty("thisUser")){   /////////////////DO WE WANT THIS?
         res.redirect("/upload");
@@ -163,9 +175,9 @@ router.get('/', (req,res)=>{
      
   });
 
-  router.post('/newUser', async (req,res)=>{
+  router.post('/newUser', async (req,res)=>{///XSS DONE
   
-      var query = { username: req.body.username };
+      var query = { username: sanitize(req.body.username) };
 
       const tempResult = await usersCollection.find(query).toArray();
       if (tempResult.length === 0 ){
@@ -192,7 +204,7 @@ router.get('/', (req,res)=>{
          
     }); //end newUser post
 
-    router.get('/logout', async (req, res) => {
+    router.get('/logout', async (req, res) => {  /////NO XSS NEEDED
       try{
         const anHourAgo = new Date();
         anHourAgo.setHours(anHourAgo.getHours() - 1);
@@ -208,7 +220,7 @@ router.get('/', (req,res)=>{
 ///////////////// RECIPE ROUTES /////////////////
 
 
-router.get('/upload', (req,res)=>{
+router.get('/upload', (req,res)=>{ /////NO XSS NEEDED   
   try{ 
     if(req.hasOwnProperty("thisUser")){   
       res.render("upload",{
@@ -232,7 +244,7 @@ router.get('/upload', (req,res)=>{
 });
 
 
-router.post('/upload', (req,res)=>{
+router.post('/upload', (req,res)=>{ /////NEED TO FIGURE OUT XSS
       
   // res.render(path.resolve("static/index.handlebars"),{
   //   title:"The Best Palindrome Checker in the World!"
@@ -255,7 +267,7 @@ router.post('/upload', (req,res)=>{
   });
 });
 
-  router.get('/search', (req,res)=>{
+  router.get('/search', (req,res)=>{  /////NO XSS NEEDED
 
     try{ 
       if(req.hasOwnProperty("thisUser")){   
@@ -281,7 +293,7 @@ router.post('/upload', (req,res)=>{
       // });
     });
 
-    router.post('/search', async (req,res)=>{ // here we search for all recipes with a specific name
+    router.post('/search', async (req,res)=>{ // here we search for all recipes with a specific name  /////XSS DONE
         
       // res.render(path.resolve("static/index.handlebars"),{
       //   title:"The Best Palindrome Checker in the World!"
@@ -292,7 +304,7 @@ router.post('/upload', (req,res)=>{
         console.log("search by name"); 
         console.log(req.body.searchKeyword);  
         console.log(typeof req.body.searchKeyword);   
-        var query = { name: req.body.searchKeyword };     ///xss works here?
+        var query = { name: sanitize(req.body.searchKeyword) };
         collection.find(query).toArray(function(err, result) {
           if (err) throw err;
           if(result.length === 0){
@@ -300,14 +312,14 @@ router.post('/upload', (req,res)=>{
             
           }
           res.json({results : result, status: true});
-          
+
         });
         
       }else if(req.body.searchBy === "ingss"){
         console.log("search by ingss");
         console.log(req.body.searchKeyword); 
         console.log(typeof req.body.searchKeyword); 
-        collection.find({ingss: {$elemMatch: {name:req.body.searchKeyword}}}).toArray(function(err, result){
+        collection.find({ingss: {$elemMatch: {name: sanitize(req.body.searchKeyword)}}}).toArray(function(err, result){
         if (err) throw err;
         if(result.length === 0){
           console.log("nothing returned");
@@ -320,7 +332,7 @@ router.post('/upload', (req,res)=>{
         console.log(req.body.searchKeyword); 
         console.log(typeof req.body.searchKeyword); 
 
-        var query = { chef: req.body.searchKeyword };
+        var query = { chef: sanitize(req.body.searchKeyword) };
         
         collection.find(query).toArray(function(err, result) {
           if (err) throw err;
@@ -363,9 +375,9 @@ router.post('/upload', (req,res)=>{
 
     });
 
-    router.get('/recipe/:id', (req, res) => {
+    router.get('/recipe/:id', (req, res) => { /////XSS DONE
 
-      collection.findOne({_id:req.params.id}, (err, recipe) =>{
+      collection.findOne({_id: sanitize(req.params.id)}, (err, recipe) =>{
         
         if(err) throw "err";
         if(recipe === null) throw "no document found with this ID";
@@ -386,7 +398,7 @@ router.post('/upload', (req,res)=>{
       
     });
 
-    router.patch('/recipe/:id', (req,res)=>{
+    router.patch('/recipe/:id', (req,res)=>{ /////NEED TO FIGURE OUT XSS??
 
       console.log(req.body);
       collection.update(
