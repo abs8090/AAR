@@ -10,11 +10,12 @@
   "author": "Abdulaziz_Alhomaidhi_10419107",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^2.0.1",
     "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
     "express": "^4.16.3",
     "express-handlebars": "^3.0.0",
     "mongodb": "^3.0.7",
-    "uuid": "^3.2.1",
-    "xss": "^0.3.8"
+    "uuid": "^3.2.1"
   }
 }
