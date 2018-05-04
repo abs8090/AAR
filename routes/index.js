@@ -35,7 +35,8 @@ router.use(bodyParser.json());
 var recipeNam = "";
 var stepsArr = [];
 var recipesArr = [];
-
+var tempUser;
+var newUserErrMsg = "";
 ///////////////// USER ROUTES /////////////////
 
 router.use( async(req, res, next) => {
@@ -54,7 +55,7 @@ router.use( async(req, res, next) => {
     if(tempResult.length === 0 ){
       console.log("username doesn't exist");
     }else{
-      var tempUser = tempResult[0];
+      tempUser = tempResult[0].username; //getting username for comments
       req.thisUser = tempResult[0];
       //console.log(tempResult.length);
       //console.log(tempUser.username);
@@ -122,6 +123,8 @@ router.get('/', (req,res)=>{
       console.log(user.hashedPass)
       console.log("2", userToCompareWith.hashedPass)
       console.log(user.password)
+      
+      tempUser = userToCompareWith.username;//get current username
 
       var compareHash = await bcrypt.compare(user.password, userToCompareWith.hashedPass);
       if(compareHash){
@@ -169,31 +172,58 @@ router.get('/', (req,res)=>{
   });
 
   router.post('/newUser', async (req,res)=>{
-  
+  //<script type = "text/javascript" src = "/public/newUser.js"></script> 
+
       var query = { username: req.body.username };
 
-      const tempResult = await usersCollection.find(query).toArray();
-      if (tempResult.length === 0 ){
-        console.log("OK");
-
-        var userToAdd = req.body;
-        tempID = uuid();
-        userToAdd._id = tempID;
-        userToAdd.hashedPass = await bcrypt.hash(userToAdd.hashedPass, saltRound);
-        usersCollection.insert(userToAdd, (err, numAffected, userToAdd) =>{
-          if(err) throw err;
-          if(numAffected.insertedCount !== 1) throw "error occured while adding";
-          // res.send({_id: info._id, title: info.title, ingredients: info.ingredients, steps: info.steps});
-          console.log("number of documents added: "+ numAffected.insertedCount);
-          // console.log(req.id);
-          // res.send("done");
+      if(req.body.username === "" || req.body.password === "" || req.body.email === ""){
+        console.log(req.body);
+        newUserErrMsg = "invalid input";
+        res.render("newUser",{
+          title:"New User",
+          error: "invalid input"
         });
-        res.redirect(303, '/login');
-
       }else{
-        console.log("Not OK");   
-        // res.end();     
-      }
+
+        const tempResult = await usersCollection.find(query).toArray();
+        if (tempResult.length === 0 ){
+          console.log("OK");
+  
+          var userToAdd = req.body;
+          tempID = uuid();
+          userToAdd._id = tempID;
+          console.log(userToAdd);
+          userToAdd.hashedPass = await bcrypt.hash(userToAdd.password, saltRound);
+  
+  
+          const expiresAt = new Date();
+          expiresAt.setHours(expiresAt.getHours() + 1);
+  
+          const sessionID = uuid();
+          res.cookie("AuthCookie", sessionID, { expires: expiresAt });
+          userToAdd.session = sessionID;
+          
+          tempUser = userToAdd.username;//get current username
+  
+          usersCollection.insert(userToAdd, (err, numAffected, userToAdd) =>{
+            if(err) throw err;
+            if(numAffected.insertedCount !== 1) throw "error occured while adding";
+            // res.send({_id: info._id, title: info.title, ingredients: info.ingredients, steps: info.steps});
+            console.log("number of documents added: "+ numAffected.insertedCount);
+            // console.log(req.id);
+            // res.send("done");
+            
+          });
+          res.redirect(303, '/upload');
+          // res.redirect(303, '/login');
+  
+        }else{
+          console.log("Not OK");   
+          // res.end();     
+        }
+      }      
+
+
       
          
     }); //end newUser post
@@ -399,11 +429,11 @@ router.post('/upload', (req,res)=>{
     router.patch('/recipe/:id', (req,res)=>{
 
       console.log(req.body);
+      var tempComment = {username: tempUser, comment: req.body.comments}
       collection.update(
         { _id: req.body.id},
-        { $push: { comments: req.body.comments } }
+        { $push: { comments: tempComment } }
      );
-  
     });
 
   

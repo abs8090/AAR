@@ -6,7 +6,7 @@
 ingredients:<ul id="ingss">
 {{#each this.ingss as |ingss|}}
   <li>
-    <h5>name: {{ingss.name}}:</h5> 
+    <h5>name: {{ingss.name}}</h5> 
     <h5>quantity: {{ingss.quantity}}</h5>
   </li>
 {{/each}}
@@ -27,7 +27,8 @@ steps:<ol id="step">
 comments:<ol id="comments">
 {{#each this.comments as |comment|}}
   <li>
-    {{comment.}}
+    <h5>username: {{comment.username}}</h5> 
+    <h5>comment: {{comment.comment}}</h5>
   </li>
 {{/each}}
 </ol>
