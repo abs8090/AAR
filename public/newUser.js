@@ -24,15 +24,17 @@ $(document).ready(function() {
         user.username = $("#username").val();
         user.hashedPass = $("#password").val();  ///function to hash
         user.email = $("#email").val();
-        console.log(user);
-
+        // console.log(user);
+        if(user.username == ""){
+            alert("please enter username");
+        }
         $.ajax({
             type: "POST",
             url: "/newUser",
             data: user,
             success: function(data){
                   console.log(data);
-                  
+                  window.location.href = "/login";
                 },
                 dataType: "json"
               });

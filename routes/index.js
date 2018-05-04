@@ -186,13 +186,13 @@ router.get('/', (req,res)=>{
           // res.send({_id: info._id, title: info.title, ingredients: info.ingredients, steps: info.steps});
           console.log("number of documents added: "+ numAffected.insertedCount);
           // console.log(req.id);
-          res.redirect(307, '/upload');
+          // res.send("done");
         });
-        // res.redirect(303, '/upload');
+        res.redirect(303, '/login');
 
       }else{
         console.log("Not OK");   
-        res.end();     
+        // res.end();     
       }
       
          
