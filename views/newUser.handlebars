@@ -1,6 +1,6 @@
 
     <h1>Create New User</h1>
-    <form id="form_id" method = "POST">
+    <form id="form_id" method = "POST" action="/newUser">
       
       <label for="Username">username:</label>
       <input type = "text" name = "username" id = "username"><br>
@@ -11,9 +11,9 @@
       <label for="Email">e-mail:</label>
       <input type = "text" name = "email" id = "email"><br>
       
-
-      
+      <div class="form-group">
       <input type = "submit" value = "submit" id="displayObj"/><br>
+      </div>
       <input type="button" onclick="location.href='/login';" value="Already have a username? Log In" />
 
     </form>

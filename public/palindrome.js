@@ -26,6 +26,11 @@ $(document).ready(function() {
     obj.category = $("#category").val();
     // obj.comments.push(" ");
 
+    if(obj.name == "" || obj.servings == "" || obj.chef == ""){
+      alert("please, provide some info");
+      return;
+    }
+
     console.log(obj);
     $.ajax({
       type: "POST",

@@ -136,12 +136,17 @@ router.get('/', (req,res)=>{
         //users[x].sessions.push(sessionID)
                 
        // res.redirect("/upload");
-       res.redirect(307, '/upload');
+       res.redirect(303, '/upload');
 
 
 
       }else{
         console.log("please check your password");
+        res.render("login",{
+          title:"Login",
+          error:"please check your password"
+        });
+        
       }
     }
 
@@ -151,7 +156,7 @@ router.get('/', (req,res)=>{
   router.get('/newUser', (req,res)=>{
     try{ 
       if(req.hasOwnProperty("thisUser")){   /////////////////DO WE WANT THIS?
-        res.redirect("/upload");
+        res.redirect(303, '/upload');
       }else{
         res.render("newUser",{
           title:"New User"
@@ -181,8 +186,9 @@ router.get('/', (req,res)=>{
           // res.send({_id: info._id, title: info.title, ingredients: info.ingredients, steps: info.steps});
           console.log("number of documents added: "+ numAffected.insertedCount);
           // console.log(req.id);
+          res.redirect(307, '/upload');
         });
-        res.end();
+        // res.redirect(303, '/upload');
 
       }else{
         console.log("Not OK");   
@@ -192,17 +198,21 @@ router.get('/', (req,res)=>{
          
     }); //end newUser post
 
-    router.get('/logout', async (req, res) => {
+    router.get('/logout', (req,res)=>{
       try{
+        
         const anHourAgo = new Date();
         anHourAgo.setHours(anHourAgo.getHours() - 1);
         res.cookie("AuthCookie", "", {expires: anHourAgo})
         res.clearCookie("AuthCookie");
-        res.render('user/logout');
+        res.render("logout");
+        
       }catch (err) {
         res.status(403).json({ Error: "Logout Failed" });
       }
+      
     });
+
 
 
 ///////////////// RECIPE ROUTES /////////////////
@@ -260,14 +270,15 @@ router.post('/upload', (req,res)=>{
     try{ 
       if(req.hasOwnProperty("thisUser")){   
             console.log("search page");
-    console.log(req.body);
-    res.render("search",{
-      title:"Search Page!"
-    }); 
+            console.log(req.body);
+            res.render("search",{
+            title:"Search Page!"
+            }); 
       }else{
-        res.render("newUser",{
-          title:"New User"
-        });
+        // res.render("newUser",{
+        //   title:"New User"
+        // });
+        res.redirect("/login");
       }
     } catch (err){
       res.status(403).json({ Error: "Not found" });
