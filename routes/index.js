@@ -403,37 +403,81 @@ router.post('/upload', (req,res)=>{
 
     });
 
+    router.get('/recipe', (req,res)=>{
+
+      try{ 
+        if(req.hasOwnProperty("thisUser")){   
+              res.redirect("/search");
+              // res.render("search",{
+              // title:"Search Page!"
+              // }); 
+        }else{
+          // res.render("newUser",{
+          //   title:"New User"
+          // });
+          res.redirect("/login");
+        }
+      } catch (err){
+        res.status(403).json({ Error: "Not found" });
+      }
+        // res.status(403).render(path.resolve("static/index.handlebars"),{
+        //   title:"The Best Palindrome Checker in the World!"
+        // });
+      });
+
     router.get('/recipe/:id', (req, res) => {
 
-      collection.findOne({_id:req.params.id}, (err, recipe) =>{
+      try{ 
+        if(req.hasOwnProperty("thisUser")){   
+          collection.findOne({_id:req.params.id}, (err, recipe) =>{
         
-        if(err) throw "err";
-        if(recipe === null) throw "no document found with this ID";
-        
-        res.render("recipeInfo",{
-          title:"recipe info page!",
-          id: recipe._id,
-          name: recipe.name,
-          ingss: recipe.ingss,
-          servings: recipe.servings,
-          chef: recipe.chef,
-          time: recipe.time,
-          steps: recipe.steps,
-          comments: recipe.comments
-        }); 
-        // res.json({results : recipe, status: true}); 
-    });
+            if(err) throw "err";
+            if(recipe === null) throw "no document found with this ID";
+            
+            res.render("recipeInfo",{
+              title:"recipe info page!",
+              id: recipe._id,
+              name: recipe.name,
+              ingss: recipe.ingss,
+              servings: recipe.servings,
+              chef: recipe.chef,
+              time: recipe.time,
+              steps: recipe.steps,
+              comments: recipe.comments
+            }); 
+            // res.json({results : recipe, status: true}); 
+        });
+
+        }else{
+
+          res.redirect("/login");
+        }
+      } catch (err){
+        res.status(403).json({ Error: "Not found" });
+      }
       
     });
 
     router.patch('/recipe/:id', (req,res)=>{
 
-      console.log(req.body);
-      var tempComment = {username: tempUser, comment: req.body.comments}
-      collection.update(
-        { _id: req.body.id},
-        { $push: { comments: tempComment } }
-     );
+
+
+      try{ 
+        if(req.hasOwnProperty("thisUser")){   
+          console.log(req.body);
+          var tempComment = {username: tempUser, comment: req.body.comments}
+          collection.update(
+            { _id: req.body.id},
+            { $push: { comments: tempComment } }
+         );
+
+        }else{
+
+          res.redirect("/login");
+        }
+      } catch (err){
+        res.status(403).json({ Error: "Not found" });
+      }
     });
 
   
