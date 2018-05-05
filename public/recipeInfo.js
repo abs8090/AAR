@@ -36,7 +36,7 @@ $(document).ready(function() {
 });
 
 function validate(str){
-    var re2 = new RegExp(/^(?:[A-Za-z]+)(?:[A-Za-z0-9 _]*)$/);// to check if input is a-z or 0-9; allows @ and .
+    var re2 = new RegExp(/^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$/);// to check if input is a-z or 0-9; allows @ and .
     var result = false;
     
     if( re2.test(str)){
