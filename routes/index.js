@@ -39,17 +39,53 @@ var tempUser;
 var newUserErrMsg = "";
 ///////////////// USER ROUTES /////////////////
 
+function validateEmail (str){
+  // var re1 = new RegExp(/[^-a-zA-Z0-9@._]+$/i);// to check for any input that is not a-z, 0-9, @ or .
+  var re2 = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i);// to check if input is a-z or 0-9; allows @ and .
+  var result = false;
+  
+  if( re2.test(str)){
+    result = true;
+    console.log("VALID INPUT!!!");
+    //result = checkText(str); // we have alphanumeric input
+  }else if(str.length === 0 || str === undefined){
+    result = false;
+    console.log("0 String");
+  }else{
+    result = false;
+    console.log("Invalid, Catch All");
+  }
+  return result;
+} //end validate email
+
+function validateUsername (str){
+  // var re1 = new RegExp(/[^-a-zA-Z0-9@._]+$/i);// to check for any input that is not a-z, 0-9, @ or .
+  var re2 = new RegExp(/^[a-zA-Z][a-zA-Z\d-_\.]+$/i);// to check if input is a-z or 0-9; allows @ and .
+  var result = false;
+  
+  if( re2.test(str)){
+    result = true;
+    console.log("VALID INPUT!!!");
+    //result = checkText(str); // we have alphanumeric input
+  }else if(str.length === 0 || str === undefined){
+    result = false;
+    console.log("0 String");
+  }else{
+    result = false;
+    console.log("Invalid, Catch All");
+  }
+  return result;
+} //end validate username
+
+
+
 router.use( async(req, res, next) => {
-  console.log("Middleware")
   delete req.thisUser;
 
   if(req.cookies['AuthCookie'] !== undefined){
-    
     console.log("we have a cookie");
     let tempSession = req.cookies['AuthCookie']
     var query = { session:  tempSession};
-    //console.log(query.session);
-   // console.log(tempSession);
 
     const tempResult = await usersCollection.find(query).toArray();
     if(tempResult.length === 0 ){
@@ -57,12 +93,9 @@ router.use( async(req, res, next) => {
     }else{
       tempUser = tempResult[0].username; //getting username for comments
       req.thisUser = tempResult[0];
-      //console.log(tempResult.length);
-      //console.log(tempUser.username);
     }
-  }else{
-    console.log("Mid 70");
   }
+
   next()
     });
 
@@ -78,19 +111,11 @@ router.get('/', (req,res)=>{
     res.status(403).json({ Error: "Not found" });
   }
 
-  //r
-
-    // res.status(403).render(path.resolve("static/index.handlebars"),{
-    //   title:"The Best Palindrome Checker in the World!"
-    // });
   });
-
 
 
   router.get('/login', (req,res)=>{
   
-
-
     try{ 
       if(req.hasOwnProperty("thisUser")){
         res.redirect('upload');
@@ -109,50 +134,37 @@ router.get('/', (req,res)=>{
 
   router.post('/login', async (req,res)=>{
 
-    // console.log(req.body);
     var  user = req.body;
     var query = { username: user.username };
-    // const allUsers = await usersCollection.find({}).toArray();
-    // console.log(allUsers);
     const tempResult = await usersCollection.find(query).toArray();
-    if(tempResult.length === 0 ){
-      console.log("username doesn't exist");
+    
+    if(tempResult.length === 0 || tempResult === undefined){
+      res.render("login",{
+        title:"Login",
+        error:"Username doesn't exist, please try again"
+      });
     }else{
       var userToCompareWith = tempResult[0];
-      console.log(userToCompareWith);
-      console.log(user.hashedPass)
-      console.log("2", userToCompareWith.hashedPass)
-      console.log(user.password)
       
       tempUser = userToCompareWith.username;//get current username
 
       var compareHash = await bcrypt.compare(user.password, userToCompareWith.hashedPass);
       if(compareHash){
-        console.log("passwords match");
         const expiresAt = new Date();
         expiresAt.setHours(expiresAt.getHours() + 1);
 
         const sessionID = uuid();
         res.cookie("AuthCookie", sessionID, { expires: expiresAt });
-        //user.session = sessionID 
         usersCollection.update({username:user.username}, {$set: {session:sessionID}});
-        //users[x].sessions.push(sessionID)
-                
-       // res.redirect("/upload");
+      
        res.redirect(303, '/upload');
-
-
-
       }else{
-        console.log("please check your password");
         res.render("login",{
           title:"Login",
           error:"please check your password"
         });
-        
       }
     }
-
     });
 
 
@@ -174,17 +186,26 @@ router.get('/', (req,res)=>{
   router.post('/newUser', async (req,res)=>{
   //<script type = "text/javascript" src = "/public/newUser.js"></script> 
 
+  // make sure to end request based on i-statmnt result
       var query = { username: req.body.username };
 
-      if(req.body.username === "" || req.body.password === "" || req.body.email === ""){
-        console.log(req.body);
-        newUserErrMsg = "invalid input";
+      var valUser, valPass, valEmail;
+      // valUser = await validate(req.body.username)
+      valEmail = validateEmail(req.body.email)
+      valUsername = validateUsername(req.body.username);
+      if( !valUsername ){ //if any are invalid
+        //console.log(req.body);
         res.render("newUser",{
           title:"New User",
-          error: "invalid input"
+          error: "Invalid username, Please Try Again"
+        });
+      }else if( !valEmail ){ //if any are invalid
+        //console.log(req.body);
+        res.render("newUser",{
+          title:"New User",
+          error: "Invalid e-mail address, Please Try Again"
         });
       }else{
-
         const tempResult = await usersCollection.find(query).toArray();
         if (tempResult.length === 0 ){
           console.log("OK");
@@ -215,15 +236,16 @@ router.get('/', (req,res)=>{
             
           });
           res.redirect(303, '/upload');
-          // res.redirect(303, '/login');
   
         }else{
+          res.render("newUser",{
+            title:"New User",
+            error: "Username Already Exists, Please Try Again"
+          });
           console.log("Not OK");   
           // res.end();     
         }
       }      
-
-
       
          
     }); //end newUser post
@@ -260,10 +282,7 @@ router.get('/upload', (req,res)=>{
     }
   } catch (err){
     res.status(403).json({ Error: "Not found" });
-  }
-
-  
-        
+  }        
   // res.render(path.resolve("static/index.handlebars"),{
   //   title:"The Best Palindrome Checker in the World!"
   // });

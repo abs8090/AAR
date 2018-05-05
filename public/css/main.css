@@ -2,7 +2,6 @@
 body {
   background-color: peachpuff;
   color:#722f37;
-
 }
 
 title {
@@ -41,7 +40,8 @@ label {
 }
 p {
   font-size: 15pt;
-  color: blue;
+  color: #4f3222;
+  text-align: center;
 }
 
 input{
@@ -74,3 +74,28 @@ select{
   box-shadow: 0;
   display: inline;
   }
+
+.newUser-form{
+  margin: 0 auto;
+  position: relative;
+  width: 75%;
+}  
+
+.login-form{
+  margin: 0 auto;
+  position: relative;
+  width: 55%;
+}  
+
+.btn-default{
+  display: block;
+  width: 25%;
+  margin: 0 auto;
+  font-variant: small-caps;
+  font-size: 12px;
+  /*margin-left: 350px; */
+}
+
+.button{
+  font-variant: small-caps;
+}

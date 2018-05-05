@@ -2,6 +2,7 @@
 <div class="row">
   <div class="col-sm-12">
        {{Request.query.message}} 
+    <h1>Log In</h1>
     <form id="login-form" class="login-form" method="post" action="/login">
       <div class="form-group">
         <label for="username">Username</label>
@@ -13,9 +14,9 @@
       </div>
       
       <div class="form-group">
-        <button type="submit" class="btn btn-default">Login</button>
+        <button type="submit" class="btn-default">Login</button>
       </div>
-      <input type="button" onclick="location.href='/newUser';" value="Create Account" />
+      <input type="button" class="button" onclick="location.href='/newUser';" value="Create Account" />
 
      {{#if error }}
       <div class="form-group">
