@@ -41,6 +41,10 @@ $(document).ready(function() {
     }else if(obj.searchBy === "name" || obj.searchBy === "ingss" || obj.searchBy === "chef"){
 
       obj.searchKeyword = $("#searchKeyword").val();
+      if(!validate(obj.searchKeyword)){
+        alert("Invalid input!");
+        return;
+      }
 
     }else if(obj.searchBy === "time") {
       obj.searchKeyword = $("#time").val();
@@ -85,6 +89,23 @@ $(document).ready(function() {
   });
 });
 
+function validate(str){
+  var re2 = new RegExp(/^(?:[A-Za-z]+)(?:[A-Za-z0-9 _]*)$/);// to check if input is a-z or 0-9; allows @ and .
+  var result = false;
+  
+  if( re2.test(str)){
+    result = true;
+    console.log("VALID INPUT!!!");
+    //result = checkText(str); // we have alphanumeric input
+  }else if(str.length === 0 || str === undefined){
+    result = false;
+    console.log("0 String");
+  }else{
+    result = false;
+    console.log("Invalid, Catch All");
+  }
+  return result;
+}
 
 
 /*

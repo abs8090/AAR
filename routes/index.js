@@ -77,8 +77,6 @@ function validateUsername (str){
   return result;
 } //end validate username
 
-
-
 router.use( async(req, res, next) => {
   delete req.thisUser;
 
@@ -268,7 +266,6 @@ router.get('/', (req,res)=>{
 
 ///////////////// RECIPE ROUTES /////////////////
 
-
 router.get('/upload', (req,res)=>{
   try{ 
     if(req.hasOwnProperty("thisUser")){   
@@ -299,18 +296,18 @@ router.post('/upload', (req,res)=>{
   var recipeToAdd = req.body;
   tempID = uuid();
   recipeToAdd._id = tempID;
-  console.log(req.body);
-  console.log("tempID: " + tempID);
-  console.log("recipeToAdd._id: " + recipeToAdd._id);
   recipeToAdd.time = parseInt(recipeToAdd.time);
-  console.log("do database work here");
-  collection.insert(recipeToAdd, (err, numAffected, recipe) =>{
-    if(err) throw err;
-    if(numAffected.insertedCount !== 1) throw "error occured while adding";
-    // res.send({_id: info._id, title: info.title, ingredients: info.ingredients, steps: info.steps});
-    console.log("number of documents added: "+ numAffected.insertedCount);
-    // console.log(req.id);
-  });
+    
+    collection.insert(recipeToAdd, (err, numAffected, recipe) =>{
+      if(err) throw err;
+      if(numAffected.insertedCount !== 1) throw "error occured while adding";
+      // res.send({_id: info._id, title: info.title, ingredients: info.ingredients, steps: info.steps});
+      console.log("number of documents added: "+ numAffected.insertedCount);
+      // console.log(req.id);
+    });
+  
+  
+
 });
 
   router.get('/search', (req,res)=>{

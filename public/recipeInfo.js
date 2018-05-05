@@ -14,24 +14,44 @@ $(document).ready(function() {
         obj.comments = $("#comment").val();
         
         
-        $("#comments").append("<li>"+ obj.comments + "</li>");
-        console.log("new comment made");
-        console.log(obj);
-
-        $.ajax({
-            type: "PATCH",
-            url: "/recipe/"+obj.id,
-            data: obj,
-            success: function(data){
-                  console.log(data);
+        if(!validate(obj.comments)){
+            alert("Invalid comment!");
+            return;            
+        }else{
+            $("#comments").append("<li>"+ obj.comments + "</li>");
+            console.log("new comment made");
+            console.log(obj);
     
-                },
-                dataType: "json"
-              });
+            $.ajax({
+                type: "PATCH",
+                url: "/recipe/"+obj.id,
+                data: obj,
+                success: function(data){
+                      console.log(data);
+                    },
+                    dataType: "json"
+                  });
+        }
     });
 });
 
-
+function validate(str){
+    var re2 = new RegExp(/^(?:[A-Za-z]+)(?:[A-Za-z0-9 _]*)$/);// to check if input is a-z or 0-9; allows @ and .
+    var result = false;
+    
+    if( re2.test(str)){
+      result = true;
+      console.log("VALID INPUT!!!");
+      //result = checkText(str); // we have alphanumeric input
+    }else if(str.length === 0 || str === undefined){
+      result = false;
+      console.log("0 String");
+    }else{
+      result = false;
+      console.log("Invalid, Catch All");
+    }
+    return result;
+  }
 
             //   data.results.forEach(element => {
             //     html+='<li> <a href = "/recipe/' + element._id+'">'+ element.name + '</a> </li>' 
