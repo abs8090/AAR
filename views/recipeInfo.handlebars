@@ -15,7 +15,7 @@ ingredients:<ul id="ingss">
 <h5 id="servings">Servings: {{this.servings}}</h5>
 <h5 id="chef">Chef: {{this.chef}}</h5>
 <h5 id="time">Time: {{this.time}} Minutes</h5>
-<h5 id="rating">Rating: {{this.rating}} Stars</h5>
+<h5 id="rating">Rating: {{this.rating}}</h5>
 
 Steps:<ol id="step">
 {{#each this.steps as |step|}}
@@ -24,6 +24,16 @@ Steps:<ol id="step">
   </li>
 {{/each}}
 </ol>
+
+<label for="ratingList">Rating: </label>
+<select id="ratingList">
+  <option value=0>rate recipe:</option>
+      <option value=1>1</option>
+      <option value=2>2</option>
+      <option value=3>3</option>
+      <option value=4>4</option>
+      <option value=5>5</option>
+  </select><br>
 
 Comments:<ol id="comments">
 {{#each this.comments as |comment|}}

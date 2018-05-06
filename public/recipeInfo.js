@@ -3,7 +3,8 @@ $(document).ready(function() {
 
     var obj = {
         id: null,        
-        comments: null
+        comments: null,
+        rating: null
       };
 
       console.log("ready");
@@ -11,9 +12,16 @@ $(document).ready(function() {
       $("h1").hide();
     $("form").submit(function(e){
         e.preventDefault(e);
+       
         obj.comments = $("#comment").val();
         
-        
+
+        var temp  = parseInt($("#ratingList").val());
+
+        if(temp !== 0){
+          obj.rating = temp;
+        }
+
         if(!validate(obj.comments)){
             alert("Invalid comment!");
             return;            

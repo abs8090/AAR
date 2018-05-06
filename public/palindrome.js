@@ -26,7 +26,17 @@ $(document).ready(function() {
     obj.time = parseInt($("#timeList").val());
     obj.chef = $("#chef").val();
     obj.category = $("#categories").val();
-    obj.rating = parseInt($("#ratingList").val());
+    var temp  = parseInt($("#ratingList").val());
+
+    if(temp === 0){
+      alert("you gave it 0!!!");
+      obj.rating = "no rating yet";
+      
+    }else{
+      alert("you rated");
+      obj.ratingArray.push(parseInt($("#ratingList").val()));
+      obj.rating = $("#ratingList").val();
+    }
 
     console.log(obj);
 

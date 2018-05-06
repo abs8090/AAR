@@ -6,7 +6,11 @@ $(document).ready(function() {
         username: null,
         hashedPass: null, 
         email: null,
-        session: null
+        session: null,
+        recipe: {
+            recipeID:  null ,
+            canRate: true
+        }
       };
 
       console.log("ready");

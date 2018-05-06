@@ -317,8 +317,8 @@ router.post('/upload', (req,res)=>{
   tempID = uuid();
   recipeToAdd._id = tempID;
   recipeToAdd.time = parseInt(recipeToAdd.time);
-  recipeToAdd.rating = parseInt(recipeToAdd.rating);
-    
+  //recipeToAdd.rating = parseInt(recipeToAdd.rating);
+  recipeToAdd.chef = sanitize(req.body.chef);
     collection.insert(recipeToAdd, (err, numAffected, recipe) =>{
       if(err) throw err;
       if(numAffected.insertedCount !== 1) throw "error occured while adding";
@@ -474,19 +474,44 @@ router.post('/upload', (req,res)=>{
         
             if(err) throw "err";
             if(recipe === null) throw "no document found with this ID";
-            
-            res.render("recipeInfo",{
-              title:"recipe info page!",
-              id: recipe._id,
-              name: recipe.name,
-              ingss: recipe.ingss,
-              servings: recipe.servings,
-              chef: recipe.chef,
-              time: recipe.time,
-              steps: recipe.steps,
-              rating: recipe.rating,
-              comments: recipe.comments
-            }); 
+
+            if(recipe.ratingArray.length === 0){
+              res.render("recipeInfo",{
+                title:"recipe info page!",
+                id: recipe._id,
+                name: recipe.name,
+                ingss: recipe.ingss,
+                servings: recipe.servings,
+                chef: recipe.chef,
+                time: recipe.time,
+                steps: recipe.steps,
+                rating: recipe.rating,
+                comments: recipe.comments
+              }); 
+            }else{
+              var avg = 0;
+              for(var x = 0; x < recipe.ratingArray.length; x++){
+                avg += recipe.ratingArray[x];
+              }
+              avg = avg / recipe.ratingArray.length;
+              recipe.rating = avg;
+              
+              res.render("recipeInfo",{
+                title:"recipe info page!",
+                id: recipe._id,
+                name: recipe.name,
+                ingss: recipe.ingss,
+                servings: recipe.servings,
+                chef: recipe.chef,
+                time: recipe.time,
+                steps: recipe.steps,
+                rating: recipe.rating,
+                comments: recipe.comments
+              }); 
+
+            }            
+
+
             // res.json({results : recipe, status: true}); 
         });
 
@@ -508,11 +533,26 @@ router.post('/upload', (req,res)=>{
       try{ 
         if(req.hasOwnProperty("thisUser")){
           console.log(req.body);
-          var tempComment = {username: tempUser, comment: sanitize(req.body.comments)}
-          collection.update(
-            { _id: sanitize(req.body.id)},
-            { $push: { comments: tempComment} }
-         );
+          
+          if(req.body.rating === ""){
+            var tempComment = {username: tempUser, comment: sanitize(req.body.comments)}
+            collection.update(
+              { _id: sanitize(req.body.id)},
+              { $push: { comments: tempComment} }
+           );
+
+          }else{
+            var tempComment = {username: tempUser, comment: sanitize(req.body.comments)}
+            var tempRating = parseInt(req.body.rating);
+
+            collection.update(
+              { _id: sanitize(req.body.id)},
+              { $push: { comments: tempComment},
+                $push:{ratingArray: tempRating}
+              }
+           );
+          }
+
 
         }else{
 
