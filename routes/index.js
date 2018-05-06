@@ -11,6 +11,7 @@ var tempID = uuid();
 var collection;
 var usersCollection;
 const cookieParser = require("cookie-parser");
+var xss = require("xss");
 
 MC.connect("mongodb://localhost:27017/", function(err, db) {
     if(err) { return console.dir(err); }
@@ -37,8 +38,20 @@ var stepsArr = [];
 var recipesArr = [];
 var tempUser;
 var newUserErrMsg = "";
+
+//////////////// XSS CODE ////////////////
+
+const sanitize = (source) => {
+	return xss(source, {
+		whiteList: [],
+		stripIgnoreTag: true,
+		stripIgnoreTagBody: ['script', 'style']
+	});
+}
+
 ///////////////// USER ROUTES /////////////////
 
+//no xss needed
 function validateEmail (str){
   // var re1 = new RegExp(/[^-a-zA-Z0-9@._]+$/i);// to check for any input that is not a-z, 0-9, @ or .
   var re2 = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i);// to check if input is a-z or 0-9; allows @ and .
@@ -58,6 +71,7 @@ function validateEmail (str){
   return result;
 } //end validate email
 
+//no xss needed
 function validateUsername (str){
   // var re1 = new RegExp(/[^-a-zA-Z0-9@._]+$/i);// to check for any input that is not a-z, 0-9, @ or .
   var re2 = new RegExp(/^[a-zA-Z][a-zA-Z\d-_\.]+$/i);// to check if input is a-z or 0-9; allows @ and .
@@ -77,6 +91,7 @@ function validateUsername (str){
   return result;
 } //end validate username
 
+//no xss needed
 router.use( async(req, res, next) => {
   delete req.thisUser;
 
@@ -97,6 +112,7 @@ router.use( async(req, res, next) => {
   next()
     });
 
+//no xss needed
 router.get('/', (req,res)=>{
 
   try{ 
@@ -112,6 +128,7 @@ router.get('/', (req,res)=>{
   });
 
 
+  //no xss needed
   router.get('/login', (req,res)=>{
   
     try{ 
@@ -130,10 +147,11 @@ router.get('/', (req,res)=>{
     
   });
 
+  //XSS DONE
   router.post('/login', async (req,res)=>{
 
     var  user = req.body;
-    var query = { username: user.username };
+    var query = { username: sanitize(req.body.username) };
     const tempResult = await usersCollection.find(query).toArray();
     
     if(tempResult.length === 0 || tempResult === undefined){
@@ -146,14 +164,14 @@ router.get('/', (req,res)=>{
       
       tempUser = userToCompareWith.username;//get current username
 
-      var compareHash = await bcrypt.compare(user.password, userToCompareWith.hashedPass);
+      var compareHash = await bcrypt.compare(sanitize(req.body.password), userToCompareWith.hashedPass);
       if(compareHash){
         const expiresAt = new Date();
         expiresAt.setHours(expiresAt.getHours() + 1);
 
         const sessionID = uuid();
         res.cookie("AuthCookie", sessionID, { expires: expiresAt });
-        usersCollection.update({username:user.username}, {$set: {session:sessionID}});
+        usersCollection.update({username: sanitize(req.body.username)}, {$set: {session:sessionID}});
       
        res.redirect(303, '/upload');
       }else{
@@ -165,7 +183,7 @@ router.get('/', (req,res)=>{
     }
     });
 
-
+  //no xss needed  
   router.get('/newUser', (req,res)=>{
     try{ 
       if(req.hasOwnProperty("thisUser")){   /////////////////DO WE WANT THIS?
@@ -181,16 +199,16 @@ router.get('/', (req,res)=>{
      
   });
 
+  //XSS DONE
   router.post('/newUser', async (req,res)=>{
   //<script type = "text/javascript" src = "/public/newUser.js"></script> 
 
   // make sure to end request based on i-statmnt result
-      var query = { username: req.body.username };
-
+      var query = { username: sanitize(req.body.username) };
       var valUser, valPass, valEmail;
       // valUser = await validate(req.body.username)
-      valEmail = validateEmail(req.body.email)
-      valUsername = validateUsername(req.body.username);
+      valEmail = validateEmail(sanitize(req.body.email));
+      valUsername = validateUsername(sanitize(req.body.username));
       if( !valUsername ){ //if any are invalid
         //console.log(req.body);
         res.render("newUser",{
@@ -248,6 +266,7 @@ router.get('/', (req,res)=>{
          
     }); //end newUser post
 
+    //no xss needed
     router.get('/logout', (req,res)=>{
       try{
         
@@ -266,6 +285,7 @@ router.get('/', (req,res)=>{
 
 ///////////////// RECIPE ROUTES /////////////////
 
+//no xss needed
 router.get('/upload', (req,res)=>{
   try{ 
     if(req.hasOwnProperty("thisUser")){   
@@ -286,7 +306,7 @@ router.get('/upload', (req,res)=>{
 
 });
 
-
+//FIGURE OUT XSS
 router.post('/upload', (req,res)=>{
       
   // res.render(path.resolve("static/index.handlebars"),{
@@ -297,6 +317,7 @@ router.post('/upload', (req,res)=>{
   tempID = uuid();
   recipeToAdd._id = tempID;
   recipeToAdd.time = parseInt(recipeToAdd.time);
+  recipeToAdd.rating = parseInt(recipeToAdd.rating);
     
     collection.insert(recipeToAdd, (err, numAffected, recipe) =>{
       if(err) throw err;
@@ -310,6 +331,7 @@ router.post('/upload', (req,res)=>{
 
 });
 
+//no xss needed
   router.get('/search', (req,res)=>{
 
     try{ 
@@ -337,6 +359,7 @@ router.post('/upload', (req,res)=>{
       // });
     });
 
+    //XSS DONE
     router.post('/search', async (req,res)=>{ // here we search for all recipes with a specific name
         
       // res.render(path.resolve("static/index.handlebars"),{
@@ -348,7 +371,7 @@ router.post('/upload', (req,res)=>{
         console.log("search by name"); 
         console.log(req.body.searchKeyword);  
         console.log(typeof req.body.searchKeyword);   
-        var query = { name: req.body.searchKeyword };     ///xss works here?
+        var query = { name: sanitize(req.body.searchKeyword) };
         collection.find(query).toArray(function(err, result) {
           if (err) throw err;
           if(result.length === 0){
@@ -363,7 +386,7 @@ router.post('/upload', (req,res)=>{
         console.log("search by ingss");
         console.log(req.body.searchKeyword); 
         console.log(typeof req.body.searchKeyword); 
-        collection.find({ingss: {$elemMatch: {name:req.body.searchKeyword}}}).toArray(function(err, result){
+        collection.find({ingss: {$elemMatch: {name: sanitize(req.body.searchKeyword)}}}).toArray(function(err, result){
         if (err) throw err;
         if(result.length === 0){
           console.log("nothing returned");
@@ -376,7 +399,7 @@ router.post('/upload', (req,res)=>{
         console.log(req.body.searchKeyword); 
         console.log(typeof req.body.searchKeyword); 
 
-        var query = { chef: req.body.searchKeyword };
+        var query = { chef: sanitize(req.body.searchKeyword) };
         
         collection.find(query).toArray(function(err, result) {
           if (err) throw err;
@@ -405,7 +428,7 @@ router.post('/upload', (req,res)=>{
         
         }else {
           
-          var query = req.body.searchKeyword;
+          var query = sanitize(req.body.searchKeyword);
           collection.find({ time: { $gte: query } }).toArray(function(err, result) {
             if (err) throw err;
             if(result.length === 0){
@@ -419,6 +442,7 @@ router.post('/upload', (req,res)=>{
 
     });
 
+    //no xss needed
     router.get('/recipe', (req,res)=>{
 
       try{ 
@@ -441,11 +465,12 @@ router.post('/upload', (req,res)=>{
         // });
       });
 
+    //XSS DONE
     router.get('/recipe/:id', (req, res) => {
 
       try{ 
         if(req.hasOwnProperty("thisUser")){   
-          collection.findOne({_id:req.params.id}, (err, recipe) =>{
+          collection.findOne({_id: sanitize(req.params.id)}, (err, recipe) =>{
         
             if(err) throw "err";
             if(recipe === null) throw "no document found with this ID";
@@ -459,6 +484,7 @@ router.post('/upload', (req,res)=>{
               chef: recipe.chef,
               time: recipe.time,
               steps: recipe.steps,
+              rating: recipe.rating,
               comments: recipe.comments
             }); 
             // res.json({results : recipe, status: true}); 
@@ -474,17 +500,18 @@ router.post('/upload', (req,res)=>{
       
     });
 
+    //XSS DONE
     router.patch('/recipe/:id', (req,res)=>{
 
 
 
       try{ 
-        if(req.hasOwnProperty("thisUser")){   
+        if(req.hasOwnProperty("thisUser")){
           console.log(req.body);
-          var tempComment = {username: tempUser, comment: req.body.comments}
+          var tempComment = {username: tempUser, comment: sanitize(req.body.comments)}
           collection.update(
-            { _id: req.body.id},
-            { $push: { comments: tempComment } }
+            { _id: sanitize(req.body.id)},
+            { $push: { comments: tempComment} }
          );
 
         }else{
