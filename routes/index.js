@@ -306,7 +306,7 @@ router.get('/upload', (req,res)=>{
 
 });
 
-//FIGURE OUT XSS
+//XSS DONE
 router.post('/upload', (req,res)=>{
       
   // res.render(path.resolve("static/index.handlebars"),{
@@ -319,6 +319,7 @@ router.post('/upload', (req,res)=>{
   recipeToAdd.time = parseInt(recipeToAdd.time);
   //recipeToAdd.rating = parseInt(recipeToAdd.rating);
   recipeToAdd.chef = sanitize(req.body.chef);
+    
     collection.insert(recipeToAdd, (err, numAffected, recipe) =>{
       if(err) throw err;
       if(numAffected.insertedCount !== 1) throw "error occured while adding";
