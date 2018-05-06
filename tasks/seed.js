@@ -154,6 +154,8 @@ async function main() {
             if(err) throw err;
             if(numAffected.insertedCount !== 1) throw "error occured while adding";
         });
+
+        db.close();
     });
 
     console.log("done seeding db");
