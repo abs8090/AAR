@@ -13,6 +13,8 @@ $(document).ready(function() {
     time: 0,
     chef: null,
     category: null,
+    ratingArray: [],
+    rating: null,
     comments: []
   };
 
@@ -24,8 +26,7 @@ $(document).ready(function() {
     obj.time = parseInt($("#timeList").val());
     obj.chef = $("#chef").val();
     obj.category = $("#categories").val();
-
-
+    obj.rating = parseInt($("#ratingList").val());
 
     console.log(obj);
 

@@ -1,7 +1,7 @@
 
 <form id="form_comment" method="PATCH">
 <h1 id="rsid">{{this.id}}</h1>
-<h5 id="name">Recipe Name: {{this.name}}</h5>
+<h2 id="name">Recipe Name: {{this.name}}</h2>
 
 ingredients:<ul id="ingss">
 {{#each this.ingss as |ingss|}}
@@ -15,6 +15,7 @@ ingredients:<ul id="ingss">
 <h5 id="servings">Servings: {{this.servings}}</h5>
 <h5 id="chef">Chef: {{this.chef}}</h5>
 <h5 id="time">Time: {{this.time}} Minutes</h5>
+<h5 id="rating">Rating: {{this.rating}} Stars</h5>
 
 Steps:<ol id="step">
 {{#each this.steps as |step|}}
