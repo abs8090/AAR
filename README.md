@@ -4,7 +4,7 @@ This is the Group Project for CS 546, Group AAR. <br />
 Project Manager: Abdulaziz Alhomaidhi <br />
 Group Members: Abdulaziz Alhomaidhi, Ruth Dennehy, Alexandra Behrman, James Spaniak <br />
 
-This project is a web application designed to allow user's to create and search for recipes.
+This project is a web application designed to allow user's to create and search for recipes after creating and being logged into an account.
 
 # Getting Started
 1. First you will need to make sure that node.js is installed.
