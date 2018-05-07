@@ -1,8 +1,8 @@
 # AAR
 
-This is the Group Project for CS 546, Group AAR.
-Project Manager: Abdulaziz Alhomaidhi
-Group Members: Abdulaziz Alhomaidhi, Ruth Dennehy, Alexandra Behrman, James Spaniak
+This is the Group Project for CS 546, Group AAR. <br />
+Project Manager: Abdulaziz Alhomaidhi <br />
+Group Members: Abdulaziz Alhomaidhi, Ruth Dennehy, Alexandra Behrman, James Spaniak <br />
 
 This project is a web application designed to allow user's to create and search for recipes.
 
