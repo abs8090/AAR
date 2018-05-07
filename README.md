@@ -13,7 +13,7 @@ This project is a web application designed to allow user's to create and search 
 4. In the folder containing the project run the command "npm start"
 
 Using The App
-5. Create an Account: to use this application you will need to create an account by providing a valid username, password, and e-mail.
-6. Upload A Recipe: fill out all specified fields then click the submit button
-7. Search A Recipe: you have the option to search by: ingredient, recipe name, chef, or time
-8. Log Out: after logging out you will need to login using the username and password 
+5. Create an Account: to use this application you will need to create an account by providing a valid username, password, and e-mail <br />
+6. Upload A Recipe: fill out all specified fields then click the submit button <br />
+7. Search A Recipe: you have the option to search by: ingredient, recipe name, chef, or time <br />
+8. Log Out: after logging out you will need to login using the username and password <br />
