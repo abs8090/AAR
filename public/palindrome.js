@@ -40,7 +40,6 @@ $(document).ready(function() {
     // obj.imagePath = formData;
 
     if(temp === 0){
-      alert("you gave it 0!!!");
       obj.rating = "no rating yet";
       
     }else{

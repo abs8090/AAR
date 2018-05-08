@@ -11,7 +11,6 @@ async function main() {
         _id: uuid(),        
         username: "test1",
         password: "password1",
-        hashedPass: null, 
         email: "test1@email.com",
         session: null,
         recipe: { recipeID:  null, canRate: true}
@@ -21,7 +20,6 @@ async function main() {
         _id: uuid(),        
         username: "test2",
         password: "password2",
-        hashedPass: null, 
         email: "test2@email.com",
         session: null,
         recipe: { recipeID:  null, canRate: true}
@@ -31,7 +29,6 @@ async function main() {
         _id: uuid(),        
         username: "test3",
         password: "password3",
-        hashedPass: null, 
         email: "test3@email.com",
         session: null,
         recipe: { recipeID:  null, canRate: true}
@@ -41,16 +38,15 @@ async function main() {
         _id: uuid(),        
         username: "test4",
         password: "password4",
-        hashedPass: null, 
         email: "test4@email.com",
         session: null,
         recipe: { recipeID:  null, canRate: true}
     };
 
-    user1.hashedPass = await bcrypt.hash(user1.password, saltRound);
-    user2.hashedPass = await bcrypt.hash(user2.password, saltRound);
-    user3.hashedPass = await bcrypt.hash(user3.password, saltRound);
-    user4.hashedPass = await bcrypt.hash(user4.password, saltRound);
+    user1.password = await bcrypt.hash(user1.password, saltRound);
+    user2.password = await bcrypt.hash(user2.password, saltRound);
+    user3.password = await bcrypt.hash(user3.password, saltRound);
+    user4.password = await bcrypt.hash(user4.password, saltRound);
 
     var recipe1 = {
         _id: uuid(),
