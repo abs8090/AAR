@@ -3,17 +3,17 @@
     <h1>Upload a Recipe</h1>
     <form class="upload-form" name="form_id" id="form_id" method = "POST" action="/upload" enctype="multipart/form-data">
       
-      <label for="Userphrase">Recipe Name:</label>
+      <label for="recipeName">Recipe Name:</label>
       <input type = "text" name = "recipeName" id = "recipeName"><br>
       
       <label>Upload an image:</label>
 
       <div class="container">
-      <input name="myImage" type="file" id="imageID"><br>
+      <input name="myImage" type="file"><br>
     </div>
       
 
-      <label for="ing">Ingredients: (enter one ingredients at a time, then click the button below to add)</label>
+      <label for="ingredients">Ingredients: (enter one ingredients at a time, then click the button below to add)</label>
       <input type = "text" name = "ingredients" placeholder = "Ingredient" id = "ing"><br>
       <input type = "text" name = "quantity" placeholder = "Quantity" id = "quantity"><br>
       <input type = "button" class="btn-default" value = "add ingredient" id="checkIng" /><br>
