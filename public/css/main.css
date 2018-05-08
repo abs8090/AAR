@@ -97,6 +97,7 @@ select{
   position: relative;
   width: 75%;
   font-weight: bolder;
+
 }
 
 .btn-default{
@@ -115,3 +116,4 @@ select{
   color: white;
   background: #4f3222;
 }
+
