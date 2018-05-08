@@ -43,7 +43,6 @@ $(document).ready(function() {
       obj.rating = "no rating yet";
       
     }else{
-      alert("you rated");
       obj.ratingArray.push(parseInt($("#ratingList").val()));
       obj.rating = $("#ratingList").val();
     }
