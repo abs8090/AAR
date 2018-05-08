@@ -11,7 +11,13 @@ var tempID = uuid();
 var collection;
 var usersCollection;
 const cookieParser = require("cookie-parser");
+const fs = require('fs');
 var xss = require("xss");
+const multer = require('multer');
+var formidable = require('formidable');
+
+
+
 
 MC.connect("mongodb://localhost:27017/", function(err, db) {
     if(err) { return console.dir(err); }
@@ -20,6 +26,7 @@ MC.connect("mongodb://localhost:27017/", function(err, db) {
     collection = database.collection('recipes');
     usersCollection = database.collection('users');
 });
+
 
 
 const app = express();
@@ -164,10 +171,10 @@ router.get('/', (req,res)=>{
       
       tempUser = userToCompareWith.username;//get current username
 
-      var compareHash = await bcrypt.compare(sanitize(req.body.password), userToCompareWith.hashedPass);
+      var compareHash = await bcrypt.compare(sanitize(req.body.password), userToCompareWith.password);
       if(compareHash){
         const expiresAt = new Date();
-        expiresAt.setHours(expiresAt.getHours() + 1);
+        expiresAt.setHours(expiresAt.getHours() + 12);
 
         const sessionID = uuid();
         res.cookie("AuthCookie", sessionID, { expires: expiresAt });
@@ -230,8 +237,7 @@ router.get('/', (req,res)=>{
           tempID = uuid();
           userToAdd._id = tempID;
           console.log(userToAdd);
-          userToAdd.hashedPass = await bcrypt.hash(userToAdd.password, saltRound);
-  
+          userToAdd.password = await bcrypt.hash(req.body.password, saltRound);
   
           const expiresAt = new Date();
           expiresAt.setHours(expiresAt.getHours() + 1);
@@ -306,13 +312,22 @@ router.get('/upload', (req,res)=>{
 
 });
 
-//XSS DONE
-router.post('/upload', (req,res)=>{
-      
-  // res.render(path.resolve("static/index.handlebars"),{
-  //   title:"The Best Palindrome Checker in the World!"
-  // });
+const storage = multer.diskStorage({
+  destination: './public/uploads/',
+  filename: function(req, file, cb) {
+     cb(
+        null,
+        file.fieldname + '-' + Date.now() + path.extname(file.originalname)
+     );
+  }
+});
 
+const upload = multer({
+  storage: storage
+});
+//XSS DONE
+router.post('/upload',upload.any(), async (req,res)=>{
+  
   var recipeToAdd = req.body;
   tempID = uuid();
   recipeToAdd._id = tempID;
@@ -326,9 +341,36 @@ router.post('/upload', (req,res)=>{
       // res.send({_id: info._id, title: info.title, ingredients: info.ingredients, steps: info.steps});
       console.log("number of documents added: "+ numAffected.insertedCount);
       // console.log(req.id);
+      res.redirect(303,'/upload');
     });
   
+  // console.log(req.files);
+  // var tempFile = req.files;
   
+  // if(tempFile !== undefined){
+  //   console.log("my file: ");
+  //   console.log(tempFile[0].path);
+  // }
+  // console.log("body:");
+ 
+  // obj._id = uuid();
+  // obj.name = req.body.name;
+  // obj.ingss = req.body.ingss;
+  // obj.stepsss = req.body.stepsss;
+  // obj.servings = req.body.servings;
+  // obj.time = parseInt(req.body.time);
+  // obj.category = req.body.category;
+  // obj.ratingArrayy = req.body.ratingArrayy;
+  // obj.rating = req.body.rating;
+  // obj.commentss = req.body.commentss;
+  // obj.imagePath = "";
+  // obj.chef = sanitize(req.body.cheff);
+
+
+
+
+
+
 
 });
 
@@ -476,7 +518,7 @@ router.post('/upload', (req,res)=>{
             if(err) throw "err";
             if(recipe === null) throw "no document found with this ID";
 
-            if(recipe.ratingArray.length === 0){
+            if(recipe.ratingArray === undefined || recipe.ratingArray === null){
               res.render("recipeInfo",{
                 title:"recipe info page!",
                 id: recipe._id,
@@ -548,9 +590,11 @@ router.post('/upload', (req,res)=>{
 
             collection.update(
               { _id: sanitize(req.body.id)},
-              { $push: { comments: tempComment},
-                $push:{ratingArray: tempRating}
-              }
+              { $push: { comments: tempComment} }
+           );
+            collection.update(
+              { _id: sanitize(req.body.id)},
+              { $push:{ratingArray: tempRating} }
            );
           }
 

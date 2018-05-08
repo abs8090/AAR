@@ -1,20 +1,32 @@
 
     <h1>Upload a Recipe</h1>
-    <form id="form_id" method = "POST">
+    <form class="upload-form" name="form_id" id="form_id" method = "POST" action="/upload" enctype="multipart/form-data">
       
       <label for="Userphrase">Recipe Name:</label>
       <input type = "text" name = "recipeName" id = "recipeName"><br>
       
+      <label>Upload an image:</label>
+
+      <div class="container">
+      <input name="myImage" type="file" id="imageID"><br>
+    </div>
+      
+
       <label for="ing">Ingredients: (enter one ingredients at a time, then click the button below to add)</label>
-      <input type = "text" name = "ingredients" id = "ing"><br>
-      <input type = "text" name = "quantity" id = "quantity"><br>
-      <input type = "button" value = "add ingredient" id="checkIng" /><br>
+      <input type = "text" name = "ingredients" placeholder = "Ingredient" id = "ing"><br>
+      <input type = "text" name = "quantity" placeholder = "Quantity" id = "quantity"><br>
+      <input type = "button" class="btn-default" value = "add ingredient" id="checkIng" /><br>
       <ol id="ingList"></ol>
 
       <label for="steps">Steps: (enter one step at a time, then click the button below to add)</label>
       <input type = "text" name = "steps" id = "step"><br>
-      <input type = "button" value = "add step" id="checkStep" /><br>
+      <input type = "button" class="btn-default" value = "add step" id="checkStep" /><br>
        <ol id="stepList"></ol>
+
+      <label for="chef">Chef (optional):</label>
+      <input type = "text" name = "chef" placeholder = "Example: Rachel Ray" id = "chef"><br>
+
+
        
 
       <label for="serving">Servings:</label>
@@ -27,9 +39,6 @@
 
       </select><br>
 
-      <label for="chef">Chef (optional):</label>
-
-      <input type = "text" name = "chef" id = "chef"><br>
 
       <label for="category">Category:</label>
       <select id="categories">
@@ -72,11 +81,18 @@
       </select><br>
       
       <input type = "submit" value = "submit" id="displayObj"/><br>
-      <input type="button" onclick="location.href='/search';" value="go to search page" />
-      
-
-
+      <input type="button" class="btn-default" onclick="location.href='/search';" value="go to search page" />
     </form>
-
+    
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
 <script type = "text/javascript" src = "/public/palindrome.js"></script>
+
+<!--
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>  
+  -->
  

@@ -36,7 +36,7 @@ label {
   
   display: block;
   text-align: center;
-  font-size: 15pt;
+  font-size: 14pt;
 }
 p {
   font-size: 15pt;
@@ -87,6 +87,13 @@ select{
   width: 55%;
 }  
 
+.upload-form{
+  margin: 0 auto;
+  position: relative;
+  width: 90%;
+
+}
+
 .btn-default{
   display: block;
   width: 25%;
@@ -99,3 +106,10 @@ select{
 .button{
   font-variant: small-caps;
 }
+
+/*
+.container{
+  margin: 0 auto;
+  width: 100%;
+}
+*/
