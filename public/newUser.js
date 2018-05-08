@@ -4,7 +4,7 @@ $(document).ready(function() {
     var user = {
         _id: null,        
         username: null,
-        hashedPass: null, 
+        password: null, 
         email: null,
         session: null,
         recipe: {
@@ -26,7 +26,7 @@ $(document).ready(function() {
        // $("#comments").append("<li>"+ obj.comments + "</li>");
         //console.log("new comment made");
         user.username = $("#username").val();
-        user.hashedPass = $("#password").val();  ///function to hash
+        user.password = $("#password").val();  ///function to hash
         user.email = $("#email").val();
         console.log(user);
 

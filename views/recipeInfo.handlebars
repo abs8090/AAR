@@ -1,7 +1,10 @@
 
 <form id="form_comment" method="PATCH">
 <h1 id="rsid">{{this.id}}</h1>
-<h2 id="name">Recipe Name: {{this.name}}</h2>
+<h2 id="name">Recipe Name: {{name}}</h2>
+
+<h2>photo:</h2>
+<img id="recipeImg" src="{{this.imagePath}}">
 
 ingredients:<ul id="ingss">
 {{#each this.ingss as |ingss|}}

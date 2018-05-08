@@ -14,8 +14,6 @@ $(document).ready(function() {
         e.preventDefault(e);
        
         obj.comments = $("#comment").val();
-        
-
         var temp  = parseInt($("#ratingList").val());
 
         if(temp !== 0){

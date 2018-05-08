@@ -11,12 +11,16 @@ $(document).ready(function() {
     steps: [],
     servings: null,
     time: 0,
-    chef: null,
+    cheff: null,
     category: null,
     ratingArray: [],
     rating: null,
-    comments: []
+    comments: [],
+    imagePath: null
   };
+
+  var ingsArr = [];
+  var stepArr = [];
 
   $("form").submit(function(e){
     e.preventDefault(e);
@@ -26,7 +30,14 @@ $(document).ready(function() {
     obj.time = parseInt($("#timeList").val());
     obj.chef = $("#chef").val();
     obj.category = $("#categories").val();
+    // obj.imageID = $("#imageID").val();
     var temp  = parseInt($("#ratingList").val());
+
+    
+    console.log(obj);
+    // var form = $('form')[0]; // You need to use standard javascript object here
+    // var formData = new FormData(form);
+    // obj.imagePath = formData;
 
     if(temp === 0){
       alert("you gave it 0!!!");
@@ -37,9 +48,7 @@ $(document).ready(function() {
       obj.ratingArray.push(parseInt($("#ratingList").val()));
       obj.rating = $("#ratingList").val();
     }
-
-    console.log(obj);
-
+    
     if(!validate(obj.name)){
       alert("invalid recipe name!");
     }else if(obj.ingss.length === 0){
@@ -52,22 +61,24 @@ $(document).ready(function() {
       alert("invalid category!");
     }else if(obj.time === 0){
       alert("invalid recipe time!");
-    }
-    
-    else{
+    }else{
+      var formData = new FormData(this);
+      // for ( var key in obj ) {
+      //   formData.append(key, obj[key]);
+      //  }
+      formData.append('obj', JSON.stringify(obj));
       $.ajax({
-        type: "POST",
-        url: "/upload",
-        data: obj,
-        success: function(data){
-          alert("recipe added successfully!");
-  
-        },
-        dataType: "json"
+        type: 'POST',
+        url: '/upload',
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function(){
+          alert("recipe has been added!");
+        }
       });
     }
-
-
   });
   
   $("#checkIng").click(function (e){
@@ -88,6 +99,7 @@ $(document).ready(function() {
 
       // console.log(temp);
       obj.ingss.push(temp);
+      ingsArr.push(temp);
     }
     
 
@@ -104,6 +116,7 @@ $(document).ready(function() {
       
     $("#stepList").append("<li>"+ temp + "</li>");
     obj.steps.push(temp);
+    stepArr.push(temp);
     }
   });
 
