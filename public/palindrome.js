@@ -82,7 +82,7 @@ $(document).ready(function() {
   $("#checkIng").click(function (e){
     e.preventDefault(e);
     var temp = {
-      name: $("#ing").val(),
+      name: $("#ingredients").val(),
       quantity: $("#quantity").val()
     }
 
@@ -106,7 +106,7 @@ $(document).ready(function() {
 
   $("#checkStep").click(function (e){
     e.preventDefault(e);
-    var temp = $("#step").val();
+    var temp = $("#steps").val();
 
     if(!validate(temp)){
       alert("invalid step");
