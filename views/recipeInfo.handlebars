@@ -7,7 +7,7 @@
 <h2>photo:</h2>
 <img id="recipeImg" src="{{this.imagePath}}">
 
-<h5 id="ingredients">Ingredients:</h5><ul id="ingss"> 
+<h3 id="ingredients">Ingredients:</h3><ul id="ingss"> 
 {{#each this.ingss as |ingss|}}
   <li>
     <h5>Name: {{ingss.name}}</h5> 
@@ -38,8 +38,8 @@
       <option value=4>4</option>
       <option value=5>5</option>
   </select><br>
-
-Comments:<ol id="comments">
+<label for="commentList">Comments: </label>
+<ol id="comments" name="commentList">
 {{#each this.comments as |comment|}}
   <li>
     <h5>Username: {{comment.username}}</h5> 
