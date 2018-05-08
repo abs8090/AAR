@@ -1,7 +1,18 @@
 
 body {
-  background-color: peachpuff;
-  color:#722f37;
+  background-size:cover;
+  background-image: 
+    linear-gradient(
+      rgba(0, 0, 0, 0),
+      rgba(0, 0, 0, 0.02)
+    ),
+    url(baking.jpeg);
+    color: rgb(54, 40, 40);
+}
+
+body.form{
+  background-size:cover;
+  background-image: url(form.png);
 }
 
 title {
@@ -13,21 +24,15 @@ h1{
   color:#722f37;
 }
 
-li.is-palindrome{
-  color: blue;
-}
-
-li.not-palindrome{
-  color: red;
-}
 label.attemptsLabel{
   text-align: left;
   color: brown;
   font-size: 20pt;
   font-family: 'Times New Roman';
 }
-h2{
+h2, h3{
   font-size: 20pt;
+  text-align: center;
 }
 footer{
   text-align: center;
@@ -36,7 +41,7 @@ label {
   
   display: block;
   text-align: center;
-  font-size: 15pt;
+  font-size: 14pt;
 }
 p {
   font-size: 15pt;
@@ -53,7 +58,7 @@ input{
 }
 
 input[type = "submit"]{
-  background-color: #123C69;
+  background-color: #4f3222;
   color: white;
   height: 20pt;
   font-variant: small-caps;
@@ -78,7 +83,7 @@ select{
 .newUser-form{
   margin: 0 auto;
   position: relative;
-  width: 75%;
+  width: 50%;
 }  
 
 .login-form{
@@ -87,15 +92,26 @@ select{
   width: 55%;
 }  
 
+.upload-form{
+  margin: 0 auto;
+  position: relative;
+  width: 75%;
+  font-weight: bolder;
+}
+
 .btn-default{
   display: block;
   width: 25%;
   margin: 0 auto;
   font-variant: small-caps;
   font-size: 12px;
-  /*margin-left: 350px; */
+  background: #6f4e37;
+  color: white;
+
 }
 
 .button{
   font-variant: small-caps;
+  color: white;
+  background: #4f3222;
 }

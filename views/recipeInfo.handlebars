@@ -1,9 +1,14 @@
+<body class="form">
 
 <form id="form_comment" method="PATCH">
 <h1 id="rsid">{{this.id}}</h1>
 <h2 id="name">Recipe Name: {{this.name}}</h2>
 
-ingredients:<ul id="ingss">
+<h2>photo: </h2>
+<img src ={{this.imagePath}}>
+
+
+<h5 id="ingredients">Ingredients:</h5><ul id="ingss"> 
 {{#each this.ingss as |ingss|}}
   <li>
     <h5>Name: {{ingss.name}}</h5> 
@@ -17,7 +22,7 @@ ingredients:<ul id="ingss">
 <h5 id="time">Time: {{this.time}} Minutes</h5>
 <h5 id="rating">Rating: {{this.rating}}</h5>
 
-Steps:<ol id="step">
+<h5 id="steps">Steps:</h5><ol id="step">
 {{#each this.steps as |step|}}
   <li>
     {{step.}}
@@ -58,7 +63,12 @@ Comments:<ol id="comments">
   <a href="https://twitter.com/intent/tweet?button_hashtag=share&ref_src=twsrc%5Etfw" class="twitter-hashtag-button" data-text="I just uploaded a recipe to the AAR Recipe Database! Share your own at https://localhost:3000" data-show-count="false">Tweet</a>
   <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
+
+  <input type="button" class="btn-default" onclick="location.href='/';" value="Upload A Recipe" />
+  <input type="button" class="btn-default" onclick="location.href='/search';" value="Search For A Recipe" />
+  <input type="button" class="btn-default" onclick="location.href='/logout';" value="Log Out" />
 </div>
 
 </form>
+</body>
 <script type = "text/javascript" src = "/public/recipeInfo.js"></script>
