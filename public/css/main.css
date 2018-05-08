@@ -1,12 +1,7 @@
 
 body {
   background-size:cover;
-  background-image: 
-    linear-gradient(
-      rgba(0, 0, 0, 0),
-      rgba(0, 0, 0, 0.02)
-    ),
-    url(baking.jpeg);
+  background-image:  url(form.png);
     color: rgb(54, 40, 40);
 }
 
