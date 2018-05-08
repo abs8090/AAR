@@ -32,11 +32,22 @@ MC.connect("mongodb://localhost:27017/", function(err, db) {
 const app = express();
 const handelBar = require('express-handlebars');
 
+var hbs = handelBar.create({
+  // Specify helpers which are only registered on this instance.
+  helpers: {
+      foo: function () { return 'FOO!'; },
+      bar: function () { return 'BAR!'; }
+  }
+});
+
 router.use(bodyParser.urlencoded({extended: true}));
 router.use(bodyParser.json());
 
 app.engine('handlebars', handelBar({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
+app.use(express.static(path.join(__dirname, '/public')));
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
+
 router.use(cookieParser());
 router.use(bodyParser.json()); 
 
@@ -328,12 +339,16 @@ const upload = multer({
 //XSS DONE
 router.post('/upload',upload.any(), async (req,res)=>{
   
-  var recipeToAdd = req.body;
+  console.log(req.body);
+  console.log(JSON.parse(req.body.obj));
+  res.json(req.files[0]);
+  var recipeToAdd = JSON.parse(req.body.obj);
   tempID = uuid();
   recipeToAdd._id = tempID;
   recipeToAdd.time = parseInt(recipeToAdd.time);
   //recipeToAdd.rating = parseInt(recipeToAdd.rating);
   recipeToAdd.chef = sanitize(req.body.chef);
+  recipeToAdd.imagePath = req.files[0].path;
     
     collection.insert(recipeToAdd, (err, numAffected, recipe) =>{
       if(err) throw err;
@@ -341,7 +356,7 @@ router.post('/upload',upload.any(), async (req,res)=>{
       // res.send({_id: info._id, title: info.title, ingredients: info.ingredients, steps: info.steps});
       console.log("number of documents added: "+ numAffected.insertedCount);
       // console.log(req.id);
-      res.redirect(303,'/upload');
+      
     });
   
   // console.log(req.files);
@@ -522,13 +537,14 @@ router.post('/upload',upload.any(), async (req,res)=>{
               res.render("recipeInfo",{
                 title:"recipe info page!",
                 id: recipe._id,
+                imagePath: "/"+recipe.imagePath,
                 name: recipe.name,
                 ingss: recipe.ingss,
                 servings: recipe.servings,
                 chef: recipe.chef,
                 time: recipe.time,
                 steps: recipe.steps,
-                rating: recipe.rating,
+                rating: "no ratings yet",
                 comments: recipe.comments
               }); 
             }else{
@@ -543,6 +559,7 @@ router.post('/upload',upload.any(), async (req,res)=>{
                 title:"recipe info page!",
                 id: recipe._id,
                 name: recipe.name,
+                imagePath: "/"+recipe.imagePath,
                 ingss: recipe.ingss,
                 servings: recipe.servings,
                 chef: recipe.chef,

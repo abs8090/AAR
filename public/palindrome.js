@@ -8,7 +8,7 @@ $(document).ready(function() {
     _id: null,
     name: null,
     ingss: [],
-    stepsss: [],
+    steps: [],
     servings: null,
     time: 0,
     cheff: null,
@@ -16,8 +16,7 @@ $(document).ready(function() {
     ratingArray: [],
     rating: null,
     comments: [],
-    imagePath: null,
-    upload: null
+    imagePath: null
   };
 
   var ingsArr = [];
@@ -33,7 +32,7 @@ $(document).ready(function() {
     obj.category = $("#categories").val();
     // obj.imageID = $("#imageID").val();
     var temp  = parseInt($("#ratingList").val());
-    obj.upload = $("#imageID").val();
+
     
     console.log(obj);
     // var form = $('form')[0]; // You need to use standard javascript object here
@@ -54,7 +53,7 @@ $(document).ready(function() {
       alert("invalid recipe name!");
     }else if(obj.ingss.length === 0){
       alert("please, add at lease one ingredient");
-    }else if(obj.stepsss.length === 0){
+    }else if(obj.steps.length === 0){
       alert("please, add at least one step!");
     }else if(obj.servings === "0"){
       alert("invalid servings!");
@@ -63,37 +62,23 @@ $(document).ready(function() {
     }else if(obj.time === 0){
       alert("invalid recipe time!");
     }else{
-      // var formData = new FormData(this);
+      var formData = new FormData(this);
       // for ( var key in obj ) {
       //   formData.append(key, obj[key]);
       //  }
-
-      // $.ajax({
-      //   type: 'POST',
-      //   url: '/upload',
-      //   data: formData,
-      //   cache: false,
-      //   contentType: false,
-      //   processData: false,
-      //   success: function(){
-      //     alert("done");
-      //   }
-      // });
-
+      formData.append('obj', JSON.stringify(obj));
       $.ajax({
-        type: "POST",
-        url: "/upload",
-        data: obj,
-        // contentType: false, // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)
-        // processData: false,
-        success: function(data){
-          alert("recipe added successfully!");
-        },
-        dataType: "json"
+        type: 'POST',
+        url: '/upload',
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function(){
+          alert("recipe has been added!");
+        }
       });
     }
-
-
   });
   
   $("#checkIng").click(function (e){
@@ -130,7 +115,7 @@ $(document).ready(function() {
     }else{
       
     $("#stepList").append("<li>"+ temp + "</li>");
-    obj.stepsss.push(temp);
+    obj.steps.push(temp);
     stepArr.push(temp);
     }
   });
