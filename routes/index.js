@@ -243,7 +243,9 @@ router.get('/', (req,res)=>{
         anHourAgo.setHours(anHourAgo.getHours() - 1);
         res.cookie("AuthCookie", "", {expires: anHourAgo})
         res.clearCookie("AuthCookie");
-        res.render("logout");
+        res.render("logout",{
+          title:"logout page"
+        });
         
       }catch (err) {
         res.status(403).json({ Error: "Logout Failed" });
