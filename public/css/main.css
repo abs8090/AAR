@@ -4,14 +4,17 @@ body {
   background-image:  url(form.png);
     color: rgb(54, 40, 40);
 }
-
+img{
+  width: 40%;
+  height: 40%;
+}
 body.form{
   background-size:cover;
   background-image: url(form.png);
 }
 
 title {
-  text-align: center;  
+  text-align: center; 
 }
 h1{
   text-align: center;

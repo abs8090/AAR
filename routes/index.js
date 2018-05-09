@@ -400,46 +400,50 @@ router.post('/upload',upload.any(), async (req,res)=>{
         if(req.hasOwnProperty("thisUser")){   
           collection.findOne({_id: sanitize(req.params.id)}, (err, recipe) =>{
         
-            if(err) throw "err";
-            if(recipe === null) throw "no document found with this ID";
-
-            if(recipe.ratingArray === undefined || recipe.ratingArray === null){
-              res.render("recipeInfo",{
-                title:"recipe info page!",
-                id: recipe._id,
-                imagePath: "/"+recipe.imagePath,
-                name: recipe.name,
-                ingss: recipe.ingss,
-                servings: recipe.servings,
-                chef: recipe.chef,
-                time: recipe.time,
-                steps: recipe.steps,
-                rating: "no ratings yet",
-                comments: recipe.comments
-              }); 
+            // if(err) throw "err";
+            if(err || recipe === null) {
+              res.render("error");
             }else{
-              var avg = 0;
-              for(var x = 0; x < recipe.ratingArray.length; x++){
-                avg += recipe.ratingArray[x];
-              }
-              avg = avg / recipe.ratingArray.length;
-              recipe.rating = avg;
-              
-              res.render("recipeInfo",{
-                title:"recipe info page!",
-                id: recipe._id,
-                name: recipe.name,
-                imagePath: "/"+recipe.imagePath,
-                ingss: recipe.ingss,
-                servings: recipe.servings,
-                chef: recipe.chef,
-                time: recipe.time,
-                steps: recipe.steps,
-                rating: recipe.rating,
-                comments: recipe.comments
-              }); 
+              if(recipe.ratingArray === undefined || recipe.ratingArray === null){
+                res.render("recipeInfo",{
+                  title:"recipe info page!",
+                  id: recipe._id,
+                  imagePath: "/"+recipe.imagePath,
+                  name: recipe.name,
+                  ingss: recipe.ingss,
+                  servings: recipe.servings,
+                  chef: recipe.chef,
+                  time: recipe.time,
+                  steps: recipe.steps,
+                  rating: "no ratings yet",
+                  comments: recipe.comments
+                }); 
+              }else{
+                var avg = 0;
+                for(var x = 0; x < recipe.ratingArray.length; x++){
+                  avg += recipe.ratingArray[x];
+                }
+                avg = avg / recipe.ratingArray.length;
+                recipe.rating = avg;
+                
+                res.render("recipeInfo",{
+                  title:"recipe info page!",
+                  id: recipe._id,
+                  name: recipe.name,
+                  imagePath: "/"+recipe.imagePath,
+                  ingss: recipe.ingss,
+                  servings: recipe.servings,
+                  chef: recipe.chef,
+                  time: recipe.time,
+                  steps: recipe.steps,
+                  rating: recipe.rating,
+                  comments: recipe.comments
+                }); 
+  
+              } 
+            }
 
-            }            
+                       
             // res.json({results : recipe, status: true}); 
         });
 
