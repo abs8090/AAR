@@ -1,5 +1,5 @@
 
-// first commit
+
 var timeDictionary = {"0":0, "5":5, "10":10};
 
 $(document).ready(function() {
@@ -30,14 +30,7 @@ $(document).ready(function() {
     obj.time = parseInt($("#timeList").val());
     obj.chef = $("#chef").val();
     obj.category = $("#categories").val();
-    // obj.imageID = $("#imageID").val();
     var temp  = parseInt($("#ratingList").val());
-
-    
-    console.log(obj);
-    // var form = $('form')[0]; // You need to use standard javascript object here
-    // var formData = new FormData(form);
-    // obj.imagePath = formData;
 
     if(temp === 0){
       obj.rating = "no rating yet";
@@ -61,9 +54,6 @@ $(document).ready(function() {
       alert("invalid recipe time!");
     }else{
       var formData = new FormData(this);
-      // for ( var key in obj ) {
-      //   formData.append(key, obj[key]);
-      //  }
       formData.append('obj', JSON.stringify(obj));
       $.ajax({
         type: 'POST',
@@ -95,14 +85,10 @@ $(document).ready(function() {
     }else{
       $("#ingList").append("<li>"+ temp.name + "</li>");
 
-      // console.log(temp);
       obj.ingss.push(temp);
       ingsArr.push(temp);
     }
-    
-
   });
-
 
   $("#checkStep").click(function (e){
     e.preventDefault(e);
@@ -126,14 +112,12 @@ function validate(str){
   
   if( re2.test(str)){
     result = true;
-    console.log("VALID INPUT!!!");
-    //result = checkText(str); // we have alphanumeric input
+
   }else if(str.length === 0 || str === undefined){
     result = false;
-    console.log("0 String");
+
   }else{
     result = false;
-    console.log("Invalid, Catch All");
   }
   return result;
 }
@@ -145,13 +129,10 @@ function validateIngQuantity(str){
   if( re2.test(str)){
     result = true;
     console.log("VALID INPUT!!!");
-    //result = checkText(str); // we have alphanumeric input
   }else if(str.length === 0 || str === undefined){
     result = false;
-    console.log("0 String");
   }else{
     result = false;
-    console.log("Invalid, Catch All");
   }
   return result;
 }
