@@ -404,7 +404,7 @@ router.post('/upload',upload.any(), async (req,res)=>{
             if(err || recipe === null) {
               res.render("error");
             }else{
-              if(recipe.ratingArray === undefined || recipe.ratingArray === null){
+              if(recipe.ratingArray === undefined || recipe.ratingArray === null || recipe.ratingArray.length === 0){
                 res.render("recipeInfo",{
                   title:"recipe info page!",
                   id: recipe._id,
