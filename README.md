@@ -6,6 +6,9 @@ Group Members: Abdulaziz Alhomaidhi, Ruth Dennehy, Alexandra Behrman, James Span
 
 This project is a web application designed to allow user's to create and search for recipes after creating and being logged into an account.
 
+# Video Link:
+https://www.youtube.com/watch?v=iweVaE0ddSI&feature=youtu.be
+
 # Getting Started
 1. First you will need to make sure that node.js is installed.
 2. In the folder containing this project run the command "npm install"
