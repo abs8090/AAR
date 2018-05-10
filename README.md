@@ -16,3 +16,6 @@ This project is a web application designed to allow user's to create and search 
 7. Upload A Recipe: fill out all specified fields then click the submit button
 8. Search A Recipe: you have the option to search by: ingredient, recipe name, chef, or time
 9. Log Out: after logging out you will need to login using the username and password
+
+# General Notes
+1. in the video, we said we throw an error when a user tries to access the route ('/recipe/:id') and no such recipe exists. However, we later updated that by adding an error.handlebars page indicating that error message  with the ability to go back to the search page.
