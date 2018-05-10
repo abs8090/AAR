@@ -19,3 +19,4 @@ This project is a web application designed to allow user's to create and search 
 
 # General Notes
 1. in the video, we said we throw an error when a user tries to access the route ('/recipe/:id') and no such recipe exists. However, we later updated that by adding an error.handlebars page indicating that error message  with the ability to go back to the search page.
+2. in recipeInfo page, any comment made by the user will be shown immediatly when clicking "submit" without showing username. In order to see the name and the new rating (if the user rated the recipe) , the page needs to be refreshed. 
